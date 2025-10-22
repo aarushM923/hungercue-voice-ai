@@ -3,15 +3,9 @@ from flask import Flask, request, Response
 from twilio.twiml.voice_response import VoiceResponse, Gather
 from utils import next_action, gather_speech, internal_error_response, g, log_to_sheets, maybe_find_phone
 from nlu import extract_structured, clarifying_question, missing_fields
-from dotenv import load_dotenv
-from pathlib import Path
 
-# Load .env explicitly
-env_path = Path(__file__).resolve().parent / ".env"
-load_dotenv(dotenv_path=env_path)
 
 app = Flask(__name__)
-
 
 @app.route("/healthz", methods=["GET"])
 def healthz():
@@ -34,11 +28,11 @@ def process_full_message():
     speech = request.values.get("SpeechResult", "") or ""
     data = extract_structured(speech)
 
-    # If caller said "use my caller ID", or GPT flagged CALLER_ID, use Twilio's From
+    # Use caller ID if mentioned
     if data.get("phone") == "CALLER_ID" or ("use my caller id" in speech.lower()):
         data["phone"] = request.values.get("From", "") or data.get("phone", "")
 
-    # Fallback: regex phone from the transcript if GPT missed it
+    # Fallback phone extraction
     if not data.get("phone"):
         fb = maybe_find_phone(speech)
         if fb:
@@ -46,7 +40,6 @@ def process_full_message():
 
     miss = missing_fields(data)
 
-    # If nothing is missing, log + finish
     if not miss:
         try:
             log_to_sheets(
@@ -62,11 +55,8 @@ def process_full_message():
         vr.say(f"Thank you {data.get('name','')}. Your {data.get('role','volunteer')} information has been saved. Goodbye!")
         return Response(str(vr), mimetype="text/xml")
 
-    # Otherwise ask ONE clarifying question and pass current state forward
     ctx = {"known": data, "original": speech, "history": []}
     q = clarifying_question(ctx)
-
-    # Track how many times we asked for name/phone to prevent loops
     asked_name_count = 1 if "name" in miss else 0
     asked_phone_count = 1 if "phone" in miss else 0
 
@@ -92,7 +82,6 @@ def _only_digits(s: str) -> str:
 
 @app.route("/clarify", methods=["POST", "GET"])
 def clarify():
-    # Pull prior state carried on the URL
     role = g("role", "")
     name = g("name", "")
     phone = g("phone", "")
@@ -102,66 +91,32 @@ def clarify():
     asked_name_count = int(g("asked_name_count", "0") or 0)
     asked_phone_count = int(g("asked_phone_count", "0") or 0)
 
-    # New utterance from caller
     utter = request.values.get("SpeechResult", "") or ""
     upd = extract_structured(utter)
 
-    # --- MERGE NEW ANSWERS WITH PRIOR STATE ---
-
-    # Role
     role = upd.get("role") or role
-
-    # Name (avoid infinite loop: after 1 ask, accept Unknown)
     name = upd.get("name") or name
     if not name and asked_name_count >= 1:
         name = "Unknown"
 
-    # Phone:
-    # 1) If caller said "use my caller ID" or GPT flagged CALLER_ID, take Twilio From
+    # --- Improved phone logic ---
     if upd.get("phone") == "CALLER_ID" or ("use my caller id" in utter.lower()):
         phone = request.values.get("From", "") or phone
-
-    # 2) Otherwise, take any digits GPT extracted (or regex fallback)
     if not phone and upd.get("phone"):
         phone = _only_digits(upd.get("phone"))
     if not phone:
         fb = maybe_find_phone(utter)
         if fb:
             phone = _only_digits(fb)
+    if not phone and asked_phone_count >= 1:
+        cid = _only_digits(request.values.get("From", ""))
+        if cid:
+            phone = cid
 
-    # Notes: keep additive
     notes = (notes + " " + (upd.get("notes") or utter)).strip()
-
     data = {"role": role, "name": name, "phone": phone, "notes": notes}
-
-    # Decide what's still missing
     miss = missing_fields(data)
 
-    # --- Loop breakers ---
-    if "name" in miss and asked_name_count >= 1:
-        data["name"] = "Unknown"
-        miss.remove("name")
-
-    # --- Phone loop breaker ---
-    if "phone" in miss:
-        # If they said "use my caller ID", trust it once
-        if "caller id" in utter.lower():
-            data["phone"] = _only_digits(request.values.get("From", ""))
-            miss.remove("phone")
-        # If they spoke any digits (7+), accept it
-        elif any(ch.isdigit() for ch in utter) or maybe_find_phone(utter):
-            spoken = _only_digits(utter)
-            if spoken and len(spoken) >= 7:
-                data["phone"] = spoken
-                miss.remove("phone")
-        # If still empty after already one ask, fallback to caller ID automatically
-        elif asked_phone_count >= 1:
-            cid = _only_digits(request.values.get("From", ""))
-            if cid:
-                data["phone"] = cid
-                miss.remove("phone")
-
-    # If complete -> save
     if not miss:
         try:
             log_to_sheets(
@@ -171,13 +126,12 @@ def clarify():
                 data.get("notes") or original or utter,
             )
         except Exception as e:
-            print("save error:", e)
+            print("❌ save error:", e)
             return internal_error_response("Sorry, we had trouble saving your information.")
         vr = VoiceResponse()
         vr.say(f"Thank you {data['name']}. Your {data['role']} information has been recorded. Goodbye from HungerCue.")
         return Response(str(vr), mimetype="text/xml")
 
-    # Otherwise ask the next best question; increment counters
     next_field = "role" if "role" in miss else ("name" if "name" in miss else "phone")
     if next_field == "name":
         asked_name_count += 1
@@ -206,4 +160,4 @@ def clarify():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", "5000"))
     print("✅ HungerCue Voice AI (GPT Clarify) starting on port", port)
-    app.run(port=port, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=True)
