@@ -24,7 +24,11 @@ class Settings(BaseSettings):
     # --- Twilio ---
     twilio_account_sid: str = ""
     twilio_auth_token: str = ""
-    twilio_phone_number: str = ""  # the number SMS is sent from, E.164 format (+12125551234)
+    twilio_phone_number: str = "+18889583920"  # HungerCue's toll-free number (calls + SMS)
+    # Texting from a toll-free number requires Twilio toll-free verification. Until
+    # it's approved, SMS stays off: messages are logged as "pending verification"
+    # in the database (and visible on the dashboard) but not sent.
+    sms_enabled: bool = False
     validate_twilio_signature: bool = True  # reject webhook requests not signed by Twilio
     coordinator_phone: str = ""  # where transfer_to_human() forwards the caller
 

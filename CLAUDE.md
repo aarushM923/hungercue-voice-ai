@@ -1,6 +1,7 @@
 # Project rules
 - This repo is being completely rebuilt to match SPEC.md. The old Flask code is outdated; replace it entirely rather than patching it. Keep only what is still useful (e.g. Google Sheets logging, if it fits the new design).
-- This is a LIVE system that real restaurants and shelters call. Work on the v2 branch. Never change the live Twilio number's settings or deploy without asking me first.
+- Work on the v2 branch. The Twilio number is +1 (888) 958-3920 (toll-free), used for both testing and production. Never change its webhook or other settings, or deploy, without asking me first.
+- SMS is pending toll-free verification: SMS features are built but sending stays disabled until I confirm verification is approved.
 - Build the entire spec in one continuous session. Only stop when you need something from me: API keys, accounts, approval to spend money (calls, SMS, paid APIs), or a decision only I can make.
 - Python 3.11, type hints, pytest tests for every module. Run all tests before saying you're done.
 - Use a virtual environment in .venv. Secrets live in .env, never committed. Free downloads and package installs are fine.
