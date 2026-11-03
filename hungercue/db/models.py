@@ -128,6 +128,7 @@ class Call(Base):
     transcript: Mapped[list[dict[str, Any]]] = mapped_column(JSON, default=list)
     outcome: Mapped[str] = mapped_column(String(30), default="")  # pickup_booked, transferred, voicemail, ...
     audio_path: Mapped[str] = mapped_column(String(300), default="")
+    voicemail_url: Mapped[str] = mapped_column(String(300), default="")  # Twilio recording, if left
     keep_audio: Mapped[bool] = mapped_column(Boolean, default=False)  # caller agreed to longer retention
     cost_usd: Mapped[float] = mapped_column(Float, default=0.0)
 

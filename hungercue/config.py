@@ -57,6 +57,11 @@ class Settings(BaseSettings):
 
     # --- Call behaviour ---
     echo_mode: bool = False  # milestone-1 mode: play the caller's audio straight back
+    # Endpointing: how long a pause counts as "the caller finished". Shorter = faster
+    # replies but more risk of cutting people off mid-thought. Tuned with the eval suite.
+    stt_endpointing_ms: int = 200
+    vad_min_silence_ms: int = 224
+    vad_min_speech_ms: int = 96  # speech needed before a barge-in counts (ignores coughs, clicks)
     timezone: str = "America/New_York"
 
     # --- Matching weights: score = w1*fit + w2*overlap - w3*dist(d,v) - w4*dist(v,s) ---

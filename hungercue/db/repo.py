@@ -223,6 +223,12 @@ class Repo:
             await s.flush()
             return t
 
+    async def mark_turn_interrupted(self, turn_id: int) -> None:
+        async with self.db.session() as s:
+            t = await s.get(Turn, turn_id)
+            if t is not None:
+                t.interrupted = True
+
     async def turns_since(self, since: datetime) -> list[Turn]:
         async with self.db.session() as s:
             rows = await s.scalars(select(Turn).where(Turn.created_at >= since).order_by(Turn.created_at))

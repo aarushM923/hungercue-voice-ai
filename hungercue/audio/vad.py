@@ -18,6 +18,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -30,16 +31,22 @@ CONTEXT = 32  # samples of the previous chunk prepended to each call
 CHUNK_MS = CHUNK * 1000 // SAMPLE_RATE  # 32
 
 
+def load_session(model_path: Path = MODEL_PATH) -> Any:
+    import onnxruntime as ort  # imported here so tests that fake the VAD don't load it
+
+    opts = ort.SessionOptions()
+    opts.inter_op_num_threads = 1  # tiny model: threads add overhead, not speed
+    opts.intra_op_num_threads = 1
+    return ort.InferenceSession(str(model_path), sess_options=opts, providers=["CPUExecutionProvider"])
+
+
 class SileroVAD:
     """Stateful speech-probability model. One instance per call (state is per stream)."""
 
-    def __init__(self, model_path: Path = MODEL_PATH) -> None:
-        import onnxruntime as ort  # imported here so tests that fake the VAD don't load it
-
-        opts = ort.SessionOptions()
-        opts.inter_op_num_threads = 1  # tiny model: threads add overhead, not speed
-        opts.intra_op_num_threads = 1
-        self.session = ort.InferenceSession(str(model_path), sess_options=opts, providers=["CPUExecutionProvider"])
+    def __init__(self, model_path: Path = MODEL_PATH, session: Any = None) -> None:
+        # Loading the model takes ~50 ms, so the server loads it once and passes the
+        # shared `session` in; only the small per-call state lives on this object.
+        self.session = session or load_session(model_path)
         self.reset()
 
     def reset(self) -> None:

@@ -11,11 +11,15 @@ thread per call.
 from __future__ import annotations
 
 import logging
+from collections.abc import AsyncIterator, Awaitable, Callable
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import Response
 
 from hungercue.config import Settings, get_settings
+from hungercue.pipeline.call_session import CallSession
+from hungercue.services import AppContainer, build_container
 from hungercue.telephony import twilio_stream as ts
 
 log = logging.getLogger("hungercue")
@@ -24,6 +28,9 @@ RECORDING_NOTICE = (
     "Thanks for calling HungerCue. This call is recorded to help coordinate food pickups. "
     "Para español, simplemente hable en español."
 )
+EMPTY_TWIML = '<?xml version="1.0" encoding="UTF-8"?><Response/>'
+
+ContainerBuilder = Callable[[Settings], Awaitable[AppContainer]]
 
 
 def ws_url_for(settings: Settings, request: Request) -> str:
@@ -50,11 +57,23 @@ async def verify_twilio(request: Request, settings: Settings) -> dict[str, str]:
     return form
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
-    """Build the app. Tests pass their own Settings; production uses .env."""
+def create_app(settings: Settings | None = None, builder: ContainerBuilder = build_container) -> FastAPI:
+    """Build the app. Tests pass their own Settings (and fake services)."""
     settings = settings or get_settings()
-    app = FastAPI(title="HungerCue v2")
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        # Runs once at startup (before the first request) and once at shutdown.
+        container = await builder(settings)
+        app.state.container = container
+        yield
+        await container.close()
+
+    app = FastAPI(title="HungerCue v2", lifespan=lifespan)
     app.state.settings = settings
+
+    def container_of(request: Request | WebSocket) -> AppContainer:
+        return request.app.state.container  # type: ignore[no-any-return]
 
     @app.get("/healthz")
     async def healthz() -> dict[str, bool]:
@@ -67,12 +86,26 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         twiml = ts.stream_twiml(ws_url_for(settings, request), form.get("From", ""), RECORDING_NOTICE)
         return Response(content=twiml, media_type="text/xml")
 
+    @app.post("/voicemail")
+    async def voicemail(request: Request) -> Response:
+        """Twilio posts here when a caller finishes leaving a voicemail."""
+        form = await verify_twilio(request, settings)
+        sid, url = form.get("CallSid", ""), form.get("RecordingUrl", "")
+        if sid and url:
+            await container_of(request).repo.update_call(sid, voicemail_url=url, outcome="voicemail")
+        return Response(content=EMPTY_TWIML, media_type="text/xml")
+
     @app.websocket("/media")
     async def media(websocket: WebSocket) -> None:
         """Twilio's live audio stream for one call."""
         await websocket.accept()
+        services = container_of(websocket).call_services
         try:
-            await echo_loop(websocket)
+            if settings.echo_mode or services is None:
+                await echo_loop(websocket)
+            else:
+                session = CallSession(services, websocket.send_text)
+                await session.run(websocket.receive_text)
         except WebSocketDisconnect:
             log.info("media stream disconnected")
 
@@ -82,15 +115,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 async def echo_loop(websocket: WebSocket) -> None:
     """Milestone-1 behaviour: send every inbound audio chunk straight back.
 
-    This proves the round trip works and measures the transport-only baseline
-    latency before any AI is involved.
+    Used when AI keys aren't configured yet. Proves the Twilio round trip
+    works and measures transport-only latency before any AI is involved.
     """
     stream_sid = ""
     while True:
         event = ts.parse_message(await websocket.receive_text())
         if isinstance(event, ts.StartEvent):
             stream_sid = event.stream_sid
-            log.info("call started: %s", event.call_sid)
+            log.info("call started (echo mode): %s", event.call_sid)
         elif isinstance(event, ts.MediaEvent) and stream_sid:
             await websocket.send_text(ts.media_message(stream_sid, event.payload))
         elif isinstance(event, ts.StopEvent):
