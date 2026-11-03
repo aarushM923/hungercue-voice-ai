@@ -1,3 +1,19 @@
-.env
+# Python virtual environment (recreate with: python3.11 -m venv .venv)
+.venv/
+
+# Secrets: never commit these
 .env
 google-credentials.json
+
+# Python and test caches
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local data: SQLite databases, call recordings, raw eval audio
+*.db
+recordings/
+eval/results/raw/
+
+# macOS
+.DS_Store
