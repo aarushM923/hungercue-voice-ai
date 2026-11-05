@@ -210,9 +210,15 @@ class Repo:
             return list(await s.scalars(select(Call).order_by(Call.started_at.desc()).limit(limit)))
 
     async def calls_with_audio_before(self, cutoff: datetime) -> list[Call]:
+        """Calls older than cutoff that still hold raw audio (ours or a Twilio voicemail)
+        and whose caller did NOT agree to longer retention."""
         async with self.db.session() as s:
             rows = await s.scalars(
-                select(Call).where(Call.audio_path != "", Call.keep_audio.is_(False), Call.started_at < cutoff)
+                select(Call).where(
+                    (Call.audio_path != "") | (Call.voicemail_url != ""),
+                    Call.keep_audio.is_(False),
+                    Call.started_at < cutoff,
+                )
             )
             return list(rows)
 

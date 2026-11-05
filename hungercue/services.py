@@ -22,6 +22,7 @@ from hungercue.matching.service import Matcher
 from hungercue.notify.followup import FollowUp
 from hungercue.notify.sms import Texter, TwilioSms
 from hungercue.pipeline.call_session import CallSummary, Services
+from hungercue.privacy.retention import RecordingDeleter, run_retention, twilio_recording_deleter
 from hungercue.sheets.logger import SheetsLogger, open_from_settings
 from hungercue.state.session_store import SessionStore, make_redis
 from hungercue.stt.deepgram import DeepgramSTT
@@ -43,11 +44,15 @@ class AppContainer:
     followup: FollowUp
     geocoder: Geocoder
     sheets: SheetsLogger | None = None  # None when Sheets isn't configured
+    recording_deleter: RecordingDeleter | None = None  # deletes Twilio voicemails after 30 days
     call_services: Services | None = None  # None until AI keys are configured
     background: list[asyncio.Task[None]] = field(default_factory=list)  # sweeper etc.
 
     def start_background(self) -> None:
         self.background.append(asyncio.create_task(self.followup.run_sweeper()))
+        self.background.append(
+            asyncio.create_task(run_retention(self.repo, self.settings.audio_retention_days, self.recording_deleter))
+        )
 
     async def close(self) -> None:
         # Cancel background tasks AND wait for them to finish before closing the
@@ -119,6 +124,9 @@ async def build_container(settings: Settings) -> AppContainer:
     container = AppContainer(
         settings=settings, db=db, repo=repo, store=store, matcher=matcher, followup=followup,
         geocoder=Geocoder(), sheets=sheets,
+        recording_deleter=(
+            twilio_recording_deleter(settings.twilio_account_sid, settings.twilio_auth_token) if has_twilio else None
+        ),
     )
 
     missing = missing_call_keys(settings)
