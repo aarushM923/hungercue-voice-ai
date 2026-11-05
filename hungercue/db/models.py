@@ -161,4 +161,6 @@ class SmsMessage(Base):
     body: Mapped[str] = mapped_column(Text)
     pickup_id: Mapped[int | None] = mapped_column(ForeignKey("pickups.id"), nullable=True)
     kind: Mapped[str] = mapped_column(String(30), default="")  # confirmation, offer, reminder, reply
+    # sent | pending_verification (SMS disabled until toll-free verification) | failed | received
+    status: Mapped[str] = mapped_column(String(30), default="sent")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now_local)

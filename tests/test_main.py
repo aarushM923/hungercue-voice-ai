@@ -96,3 +96,15 @@ async def test_build_container_with_keys_creates_services(tmp_path: Path) -> Non
     assert vad.prob_fn.session is not None
     await c.close()
     assert missing_call_keys(settings(tmp_path)) == ["OPENAI_API_KEY", "DEEPGRAM_API_KEY"]
+
+
+def test_sms_webhook_handles_volunteer_reply(tmp_path: Path) -> None:
+    params = {"From": "+15550000100", "Body": "YES"}
+    with TestClient(create_app(settings(tmp_path))) as c:
+        repo = c.app.state.container.repo
+        c.portal.call(lambda: repo.upsert_volunteer("+15550000100", name="Ana"))
+        r = c.post("/sms", data=params, headers=signed("/sms", params))
+        assert r.status_code == 200
+        msgs = c.portal.call(repo.recent_sms)
+    # Inbound logged; the auto-reply is logged as pending because SMS is disabled by default.
+    assert [(m.direction, m.status) for m in msgs] == [("outbound", "pending_verification"), ("inbound", "received")]

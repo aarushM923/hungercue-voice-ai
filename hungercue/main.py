@@ -66,6 +66,7 @@ def create_app(settings: Settings | None = None, builder: ContainerBuilder = bui
         # Runs once at startup (before the first request) and once at shutdown.
         container = await builder(settings)
         app.state.container = container
+        container.start_background()  # the follow-up sweeper (offer timeouts, reminders)
         yield
         await container.close()
 
@@ -93,6 +94,17 @@ def create_app(settings: Settings | None = None, builder: ContainerBuilder = bui
         sid, url = form.get("CallSid", ""), form.get("RecordingUrl", "")
         if sid and url:
             await container_of(request).repo.update_call(sid, voicemail_url=url, outcome="voicemail")
+        return Response(content=EMPTY_TWIML, media_type="text/xml")
+
+    @app.post("/sms")
+    async def sms(request: Request) -> Response:
+        """Twilio posts here when someone texts our number (volunteer YES/NO replies)."""
+        form = await verify_twilio(request, settings)
+        container = container_of(request)
+        reply = await container.followup.handle_reply(form.get("From", ""), form.get("Body", ""))
+        if reply:
+            # Sent through the Texter (not inline TwiML) so it's logged and respects SMS_ENABLED.
+            await container.followup.texter.send(form.get("From", ""), reply, kind="auto_reply")
         return Response(content=EMPTY_TWIML, media_type="text/xml")
 
     @app.websocket("/media")

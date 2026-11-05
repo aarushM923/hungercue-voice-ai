@@ -236,9 +236,15 @@ class Repo:
 
     # ---------- SMS log ----------
 
-    async def log_sms(self, direction: str, phone: str, body: str, kind: str = "", pickup_id: int | None = None) -> None:
+    async def log_sms(
+        self, direction: str, phone: str, body: str, kind: str = "", pickup_id: int | None = None, status: str = "sent"
+    ) -> None:
         async with self.db.session() as s:
-            s.add(SmsMessage(direction=direction, phone=phone, body=body, kind=kind, pickup_id=pickup_id))
+            s.add(SmsMessage(direction=direction, phone=phone, body=body, kind=kind, pickup_id=pickup_id, status=status))
+
+    async def recent_sms(self, limit: int = 50) -> list[SmsMessage]:
+        async with self.db.session() as s:
+            return list(await s.scalars(select(SmsMessage).order_by(SmsMessage.id.desc()).limit(limit)))
 
     async def sms_for_pickup(self, pickup_id: int) -> list[SmsMessage]:
         async with self.db.session() as s:
