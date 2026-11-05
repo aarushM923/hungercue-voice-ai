@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from collections.abc import Awaitable, Callable
 from datetime import datetime, timedelta
 
 from hungercue.config import Settings
@@ -65,14 +66,33 @@ def reminder_text(p: Pickup) -> str:
 
 
 class FollowUp:
-    def __init__(self, repo: Repo, matcher: Matcher, texter: Texter, settings: Settings) -> None:
+    def __init__(
+        self,
+        repo: Repo,
+        matcher: Matcher,
+        texter: Texter,
+        settings: Settings,
+        on_pickup_change: Callable[[Pickup], Awaitable[None]] | None = None,
+    ) -> None:
         self.repo = repo
+        self.on_pickup_change = on_pickup_change  # e.g. update the Pickups tab in Google Sheets
         self.matcher = matcher
         self.texter = texter
         self.timeout = timedelta(minutes=settings.volunteer_reply_timeout_min)
         self.reminder_lead = timedelta(minutes=settings.reminder_lead_min)
         self.tz = settings.timezone
         self._tasks: set[asyncio.Task[None]] = set()
+
+    async def _changed(self, pickup_id: int) -> None:
+        """Tell the observer (Sheets) the pickup's status changed. Never raises."""
+        if self.on_pickup_change is None:
+            return
+        try:
+            p = await self.repo.get_pickup(pickup_id)
+            if p is not None:
+                await self.on_pickup_change(p)
+        except Exception:
+            log.exception("pickup change hook failed for %s", pickup_id)
 
     # ---------- entry points ----------
 
@@ -104,6 +124,7 @@ class FollowUp:
                     kind="unmatched",
                     pickup_id=pickup_id,
                 )
+            await self._changed(pickup_id)
             return False
         p = await self.repo.get_pickup(pickup_id)
         assert p is not None and p.volunteer is not None
@@ -114,6 +135,7 @@ class FollowUp:
             offered_volunteer_ids=[*p.offered_volunteer_ids, p.volunteer.id],
         )
         await self.texter.send(p.volunteer.phone, offer_text(p), kind="offer", pickup_id=pickup_id)
+        await self._changed(pickup_id)
         return True
 
     async def handle_reply(self, from_number: str, body: str) -> str:
@@ -140,6 +162,7 @@ class FollowUp:
         p = await self.repo.get_pickup(pickup_id)
         if p is not None and p.restaurant is not None:
             await self.texter.send(p.restaurant.phone, confirmation_text(p), kind="confirmation", pickup_id=pickup_id)
+        await self._changed(pickup_id)
 
     # ---------- the sweeper ----------
 

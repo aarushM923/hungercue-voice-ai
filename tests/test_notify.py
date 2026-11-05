@@ -121,3 +121,22 @@ async def test_message_texts(repo: Repo) -> None:
     p = await repo.get_pickup(pid)
     assert window_text(p) == "Tue Nov 3, 3:00 PM-5:00 PM"
     assert len(offer_text(p)) < 320 and len(confirmation_text(p)) < 320  # at most 2 SMS segments
+
+
+async def test_pickup_change_hook_sees_each_status(repo: Repo) -> None:
+    f, gw, pid = await setup(repo)
+    seen: list[str] = []
+
+    async def hook(p) -> None:
+        seen.append(p.status)
+
+    f.on_pickup_change = hook
+    await f.offer_next(pid, now=OFFERED_AT)
+    await f.accept(pid)
+    assert seen == ["offered", "accepted"]
+
+    async def broken(p) -> None:
+        raise RuntimeError("sheets down")
+
+    f.on_pickup_change = broken
+    await f.accept(pid)  # must not raise

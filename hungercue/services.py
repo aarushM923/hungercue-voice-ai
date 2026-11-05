@@ -9,7 +9,9 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from hungercue.audio.vad import SileroVAD, VadSegmenter, load_session
 from hungercue.config import Settings
@@ -19,7 +21,8 @@ from hungercue.matching.geo import Geocoder
 from hungercue.matching.service import Matcher
 from hungercue.notify.followup import FollowUp
 from hungercue.notify.sms import Texter, TwilioSms
-from hungercue.pipeline.call_session import Services
+from hungercue.pipeline.call_session import CallSummary, Services
+from hungercue.sheets.logger import SheetsLogger, open_from_settings
 from hungercue.state.session_store import SessionStore, make_redis
 from hungercue.stt.deepgram import DeepgramSTT
 from hungercue.telephony.actions import TwilioCallActions
@@ -39,6 +42,7 @@ class AppContainer:
     matcher: Matcher
     followup: FollowUp
     geocoder: Geocoder
+    sheets: SheetsLogger | None = None  # None when Sheets isn't configured
     call_services: Services | None = None  # None until AI keys are configured
     background: list[asyncio.Task[None]] = field(default_factory=list)  # sweeper etc.
 
@@ -68,6 +72,35 @@ def missing_call_keys(settings: Settings) -> list[str]:
     return [name for name, value in needed.items() if not value]
 
 
+def build_sheets(settings: Settings) -> SheetsLogger | None:
+    """The coordinator spreadsheet logger, or None if it isn't set up on this machine."""
+    if not settings.sheets_enabled:
+        return None
+    if not Path(settings.google_credentials_json).exists():
+        log.info("Google Sheets off: %s not found", settings.google_credentials_json)
+        return None
+    opener = open_from_settings(settings.google_credentials_json, settings.google_sheet_id, settings.google_sheet_name)
+    return SheetsLogger(opener, role_tabs=settings.role_tabs, tz=settings.timezone)
+
+
+def call_end_logger(repo: Repo, sheets: SheetsLogger) -> Callable[[CallSummary], Awaitable[None]]:
+    """After each call, add a row to the caller's tab, like v1 did.
+
+    Notes = the call outcome plus what the caller said, so a coordinator can
+    see at a glance what happened without opening the dashboard.
+    """
+
+    async def hook(summary: CallSummary) -> None:
+        if not summary.caller_type:
+            return  # caller hung up before saying who they were; nothing useful to log
+        profile = await repo.lookup_caller(summary.from_number)
+        said = [part[len("caller: "):] for part in summary.transcript_text.split(" | ") if part.startswith("caller: ")]
+        notes = f"[{summary.outcome}] " + " / ".join(said)
+        await sheets.log_contact(summary.caller_type.title(), profile.name or "Unknown", summary.from_number, notes[:1000])
+
+    return hook
+
+
 async def build_container(settings: Settings) -> AppContainer:
     db = Database(settings.database_url)
     await db.create_tables()
@@ -81,9 +114,11 @@ async def build_container(settings: Settings) -> AppContainer:
         else None
     )
     texter = Texter(repo, gateway, enabled=settings.sms_enabled)
-    followup = FollowUp(repo, matcher, texter, settings)
+    sheets = build_sheets(settings)
+    followup = FollowUp(repo, matcher, texter, settings, on_pickup_change=sheets.sync_pickup if sheets else None)
     container = AppContainer(
-        settings=settings, db=db, repo=repo, store=store, matcher=matcher, followup=followup, geocoder=Geocoder()
+        settings=settings, db=db, repo=repo, store=store, matcher=matcher, followup=followup,
+        geocoder=Geocoder(), sheets=sheets,
     )
 
     missing = missing_call_keys(settings)
@@ -117,5 +152,6 @@ async def build_container(settings: Settings) -> AppContainer:
         actions=actions,
         geocode=container.geocoder,
         on_donation=on_donation,
+        on_call_end=call_end_logger(repo, sheets) if sheets else None,
     )
     return container
