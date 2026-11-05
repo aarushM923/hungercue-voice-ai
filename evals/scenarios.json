@@ -1,0 +1,3660 @@
+[
+ {
+  "id": "S001",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000000",
+  "name": "Luis",
+  "truth": {
+   "business_name": "Sunrise Bagels",
+   "item_keywords": [
+    [
+     "pastr",
+     "pastel",
+     "pastri"
+    ],
+    [
+     "muffin"
+    ]
+   ],
+   "quantity_number": 2,
+   "pickup_day": "tomorrow",
+   "pickup_start": "18:00",
+   "pickup_end": "20:00",
+   "address_number": "2210",
+   "address_street": "Broadway"
+  },
+  "conditions": {
+   "voice": "aura-2-helena-en",
+   "noise": "cafe",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "pastries and muffins",
+   "quantity": "2 large boxes",
+   "day": "tomorrow",
+   "address": "2210 Broadway",
+   "window": "18:00 to 20:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S002",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000001",
+  "name": "Aisha",
+  "truth": {
+   "business_name": "Casa Lupe",
+   "item_keywords": [
+    [
+     "rice",
+     "arroz"
+    ],
+    [
+     "bean",
+     "frijol"
+    ]
+   ],
+   "quantity_number": 5,
+   "pickup_day": "tomorrow",
+   "pickup_start": "16:30",
+   "pickup_end": "18:00",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "rice and beans",
+   "quantity": "5 trays",
+   "day": "tomorrow",
+   "address": "47 Steinway Street",
+   "window": "16:30 to 18:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S003",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000002",
+  "name": "James",
+  "truth": {
+   "availability_days": [
+    "mon",
+    "tue"
+   ],
+   "availability_start": "10:00",
+   "availability_end": "16:00",
+   "neighborhoods": [
+    "Park Slope"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-zeus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "mon, tue from 10:00 to 16:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S004",
+  "caller_type": "shelter",
+  "language": "es",
+  "phone": "+15557000003",
+  "name": "Priya",
+  "truth": {
+   "shelter_name": "Bridge Women's Center",
+   "capacity": 80,
+   "needs": [
+    "prepared meals"
+   ],
+   "dietary_restrictions": [],
+   "receiving_start": "12:00",
+   "receiving_end": "20:00",
+   "address_number": "212",
+   "address_street": "West 112th Street"
+  },
+  "conditions": {
+   "voice": "aura-2-celeste-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "hours": "12:00 to 20:00 (say it naturally)",
+   "address": "212 West 112th Street"
+  }
+ },
+ {
+  "id": "S005",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000004",
+  "name": "James",
+  "truth": {
+   "business_name": "Nonna's Pasta",
+   "item_keywords": [
+    [
+     "bread",
+     "pan",
+     "loaves",
+     "loaf"
+    ]
+   ],
+   "quantity_number": 6,
+   "pickup_day": "tomorrow",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-zeus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "loaves of bread",
+   "quantity": "6 boxes",
+   "day": "tomorrow",
+   "address": "1410 Amsterdam Avenue",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S006",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000005",
+  "name": "Maria",
+  "truth": {
+   "business_name": "Corner Bakery",
+   "item_keywords": [
+    [
+     "pasta"
+    ],
+    [
+     "vegetable",
+     "verdura",
+     "veggie"
+    ]
+   ],
+   "quantity_number": 3,
+   "pickup_day": "today",
+   "pickup_start": "18:00",
+   "pickup_end": "20:00",
+   "address_number": "75",
+   "address_street": "Lenox Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-andromeda-en",
+   "noise": "cafe",
+   "snr_db": 15.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": true,
+  "said": {
+   "items": "pasta with vegetables",
+   "quantity": "3 trays",
+   "day": "today",
+   "address": "75 Lenox Avenue",
+   "window": "18:00 to 20:00 (24-hour clock; say it naturally, e.g. 'three to five pm')",
+   "note": "You have donated before; the agent may already know your business and address."
+  }
+ },
+ {
+  "id": "S007",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000006",
+  "name": "Luis",
+  "truth": {
+   "availability_days": [
+    "mon",
+    "wed"
+   ],
+   "availability_start": "10:00",
+   "availability_end": "16:00",
+   "neighborhoods": [
+    "South Bronx",
+    "Astoria"
+   ],
+   "has_car": true
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "mon, wed from 10:00 to 16:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S008",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000007",
+  "name": "Fatima",
+  "truth": {
+   "business_name": "Fresh Bowl",
+   "item_keywords": [
+    [
+     "sandwich",
+     "sándwich"
+    ]
+   ],
+   "quantity_number": 10,
+   "pickup_day": "today",
+   "pickup_start": "15:00",
+   "pickup_end": "17:00",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-arcas-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "sandwiches",
+   "quantity": "10 containers",
+   "day": "today",
+   "address": "1410 Amsterdam Avenue",
+   "window": "15:00 to 17:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S009",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000008",
+  "name": "Wei",
+  "truth": {
+   "business_name": "Mama's Soul Food",
+   "item_keywords": [
+    [
+     "fruit",
+     "fruta"
+    ]
+   ],
+   "quantity_number": 2,
+   "pickup_day": "tomorrow",
+   "pickup_start": "14:00",
+   "pickup_end": "16:00",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "fruit cups",
+   "quantity": "2 large boxes",
+   "day": "tomorrow",
+   "address": "1410 Amsterdam Avenue",
+   "window": "14:00 to 16:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S010",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000009",
+  "name": "Aisha",
+  "truth": {
+   "shelter_name": "Uptown Youth Shelter",
+   "capacity": 120,
+   "needs": [
+    "bread"
+   ],
+   "dietary_restrictions": [
+    "vegetarian"
+   ],
+   "receiving_start": "08:00",
+   "receiving_end": "14:00",
+   "address_number": "301",
+   "address_street": "Malcolm X Boulevard"
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "08:00 to 14:00 (say it naturally)",
+   "address": "301 Malcolm X Boulevard"
+  }
+ },
+ {
+  "id": "S011",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000010",
+  "name": "Fatima",
+  "truth": {
+   "availability_days": [
+    "sun"
+   ],
+   "availability_start": "13:00",
+   "availability_end": "17:00",
+   "neighborhoods": [
+    "Harlem"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "sun from 13:00 to 17:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S012",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000011",
+  "name": "Luis",
+  "truth": {
+   "availability_days": [
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "availability_start": "13:00",
+   "availability_end": "17:00",
+   "neighborhoods": [
+    "South Bronx"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-helena-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "fri, sat, sun from 13:00 to 17:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S013",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000012",
+  "name": "Priya",
+  "truth": {
+   "business_name": "Green Leaf Deli",
+   "item_keywords": [
+    [
+     "rice",
+     "arroz"
+    ],
+    [
+     "bean",
+     "frijol"
+    ]
+   ],
+   "quantity_number": 5,
+   "pickup_day": "today",
+   "pickup_start": "15:00",
+   "pickup_end": "17:00",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-andromeda-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "rice and beans",
+   "quantity": "5 trays",
+   "day": "today",
+   "address": "1410 Amsterdam Avenue",
+   "window": "15:00 to 17:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S014",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000013",
+  "name": "Maria",
+  "truth": {
+   "business_name": "Harlem Kitchen",
+   "item_keywords": [
+    [
+     "pastr",
+     "pastel",
+     "pastri"
+    ],
+    [
+     "muffin"
+    ]
+   ],
+   "quantity_number": 2,
+   "pickup_day": "today",
+   "pickup_start": "16:30",
+   "pickup_end": "18:00",
+   "address_number": "2210",
+   "address_street": "Broadway"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": true,
+  "said": {
+   "items": "pastries and muffins",
+   "quantity": "2 large boxes",
+   "day": "today",
+   "address": "2210 Broadway",
+   "window": "16:30 to 18:00 (24-hour clock; say it naturally, e.g. 'three to five pm')",
+   "note": "You have donated before; the agent may already know your business and address."
+  }
+ },
+ {
+  "id": "S015",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000014",
+  "name": "Priya",
+  "truth": {
+   "availability_days": [
+    "wed"
+   ],
+   "availability_start": "09:00",
+   "availability_end": "12:00",
+   "neighborhoods": [
+    "Jackson Heights"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-andromeda-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "availability": "wed from 09:00 to 12:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S016",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000015",
+  "name": "Tom",
+  "truth": {
+   "business_name": "Corner Bakery",
+   "item_keywords": [
+    [
+     "bread",
+     "pan",
+     "loaves",
+     "loaf"
+    ]
+   ],
+   "quantity_number": 5,
+   "pickup_day": "tomorrow",
+   "pickup_start": "16:30",
+   "pickup_end": "18:00",
+   "address_number": "75",
+   "address_street": "Lenox Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "loaves of bread",
+   "quantity": "5 trays",
+   "day": "tomorrow",
+   "address": "75 Lenox Avenue",
+   "window": "16:30 to 18:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S017",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000016",
+  "name": "Luis",
+  "truth": {
+   "business_name": "Taqueria El Sol",
+   "item_keywords": [
+    [
+     "rice",
+     "arroz"
+    ],
+    [
+     "bean",
+     "frijol"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "today",
+   "pickup_start": "16:30",
+   "pickup_end": "18:00",
+   "address_number": "88",
+   "address_street": "Orchard Street"
+  },
+  "conditions": {
+   "voice": "aura-2-luna-en",
+   "noise": "kitchen",
+   "snr_db": 15.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "rice and beans",
+   "quantity": "4 bags",
+   "day": "today",
+   "address": "88 Orchard Street",
+   "window": "16:30 to 18:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S018",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000017",
+  "name": "Tom",
+  "truth": {
+   "availability_days": [
+    "wed",
+    "fri",
+    "sun"
+   ],
+   "availability_start": "09:00",
+   "availability_end": "12:00",
+   "neighborhoods": [
+    "South Bronx",
+    "Astoria"
+   ],
+   "has_car": true
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "cafe",
+   "snr_db": 20.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "availability": "wed, fri, sun from 09:00 to 12:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S019",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000018",
+  "name": "Wei",
+  "truth": {
+   "availability_days": [
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "availability_start": "10:00",
+   "availability_end": "16:00",
+   "neighborhoods": [
+    "Astoria",
+    "Williamsburg"
+   ],
+   "has_car": true
+  },
+  "conditions": {
+   "voice": "aura-2-arcas-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "availability": "fri, sat, sun from 10:00 to 16:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S020",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000019",
+  "name": "Omar",
+  "truth": {
+   "shelter_name": "Uptown Youth Shelter",
+   "capacity": 150,
+   "needs": [
+    "bread"
+   ],
+   "dietary_restrictions": [
+    "no pork"
+   ],
+   "receiving_start": "09:00",
+   "receiving_end": "17:00",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "hours": "09:00 to 17:00 (say it naturally)",
+   "address": "1410 Amsterdam Avenue"
+  }
+ },
+ {
+  "id": "S021",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000020",
+  "name": "Luis",
+  "truth": {
+   "business_name": "Sunrise Bagels",
+   "item_keywords": [
+    [
+     "soup",
+     "sopa"
+    ],
+    [
+     "chicken",
+     "pollo"
+    ]
+   ],
+   "quantity_number": 10,
+   "pickup_day": "today",
+   "pickup_start": "16:30",
+   "pickup_end": "18:00",
+   "address_number": "88",
+   "address_street": "Orchard Street"
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "cafe",
+   "snr_db": 20.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "chicken soup",
+   "quantity": "10 containers",
+   "day": "today",
+   "address": "88 Orchard Street",
+   "window": "16:30 to 18:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S022",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000021",
+  "name": "Aisha",
+  "truth": {
+   "business_name": "Casa Lupe",
+   "item_keywords": [
+    [
+     "taco"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "tomorrow",
+   "pickup_start": "14:00",
+   "pickup_end": "16:00",
+   "address_number": "38",
+   "address_street": "Bedford Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "street",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "tacos",
+   "quantity": "4 bags",
+   "day": "tomorrow",
+   "address": "38 Bedford Avenue",
+   "window": "14:00 to 16:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S023",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000022",
+  "name": "Maria",
+  "truth": {
+   "availability_days": [
+    "wed",
+    "fri"
+   ],
+   "availability_start": "17:00",
+   "availability_end": "20:00",
+   "neighborhoods": [
+    "Washington Heights"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "cafe",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "wed, fri from 17:00 to 20:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S024",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000023",
+  "name": "James",
+  "truth": {
+   "business_name": "Harlem Kitchen",
+   "item_keywords": [
+    [
+     "fruit",
+     "fruta"
+    ]
+   ],
+   "quantity_number": 10,
+   "pickup_day": "today",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-andromeda-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "fruit cups",
+   "quantity": "10 containers",
+   "day": "today",
+   "address": "1410 Amsterdam Avenue",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S025",
+  "caller_type": "restaurant",
+  "language": "es",
+  "phone": "+15557000024",
+  "name": "Priya",
+  "truth": {
+   "business_name": "Nonna's Pasta",
+   "item_keywords": [
+    [
+     "soup",
+     "sopa"
+    ],
+    [
+     "chicken",
+     "pollo"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "tomorrow",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "2210",
+   "address_street": "Broadway"
+  },
+  "conditions": {
+   "voice": "aura-2-estrella-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "sopa de pollo",
+   "quantity": "cuatro bolsas",
+   "day": "mañana",
+   "address": "2210 Broadway",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S026",
+  "caller_type": "restaurant",
+  "language": "es",
+  "phone": "+15557000025",
+  "name": "Aisha",
+  "truth": {
+   "business_name": "Corner Bakery",
+   "item_keywords": [
+    [
+     "pastr",
+     "pastel",
+     "pastri"
+    ],
+    [
+     "muffin"
+    ]
+   ],
+   "quantity_number": 6,
+   "pickup_day": "today",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-celeste-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "pasteles y muffins",
+   "quantity": "seis cajas",
+   "day": "hoy",
+   "address": "1410 Amsterdam Avenue",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S027",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000026",
+  "name": "Luis",
+  "truth": {
+   "shelter_name": "Riverside Family Shelter",
+   "capacity": 80,
+   "needs": [
+    "bread"
+   ],
+   "dietary_restrictions": [
+    "halal"
+   ],
+   "receiving_start": "09:00",
+   "receiving_end": "17:00",
+   "address_number": "519",
+   "address_street": "Atlantic Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "kitchen",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "09:00 to 17:00 (say it naturally)",
+   "address": "519 Atlantic Avenue"
+  }
+ },
+ {
+  "id": "S028",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000027",
+  "name": "Fatima",
+  "truth": {
+   "availability_days": [
+    "mon",
+    "wed",
+    "thu"
+   ],
+   "availability_start": "17:00",
+   "availability_end": "20:00",
+   "neighborhoods": [
+    "Upper West Side"
+   ],
+   "has_car": true
+  },
+  "conditions": {
+   "voice": "aura-2-helena-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "availability": "mon, wed, thu from 17:00 to 20:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S029",
+  "caller_type": "shelter",
+  "language": "es",
+  "phone": "+15557000028",
+  "name": "Wei",
+  "truth": {
+   "shelter_name": "Bridge Women's Center",
+   "capacity": 40,
+   "needs": [
+    "prepared meals",
+    "produce"
+   ],
+   "dietary_restrictions": [
+    "no pork"
+   ],
+   "receiving_start": "09:00",
+   "receiving_end": "17:00",
+   "address_number": "75",
+   "address_street": "Lenox Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-estrella-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "09:00 to 17:00 (say it naturally)",
+   "address": "75 Lenox Avenue"
+  }
+ },
+ {
+  "id": "S030",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000029",
+  "name": "Fatima",
+  "truth": {
+   "shelter_name": "Uptown Youth Shelter",
+   "capacity": 80,
+   "needs": [
+    "prepared meals"
+   ],
+   "dietary_restrictions": [
+    "halal"
+   ],
+   "receiving_start": "08:00",
+   "receiving_end": "14:00",
+   "address_number": "301",
+   "address_street": "Malcolm X Boulevard"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "street",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "08:00 to 14:00 (say it naturally)",
+   "address": "301 Malcolm X Boulevard"
+  }
+ },
+ {
+  "id": "S031",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000030",
+  "name": "Rosa",
+  "truth": {
+   "shelter_name": "Hope House",
+   "capacity": 60,
+   "needs": [
+    "prepared meals"
+   ],
+   "dietary_restrictions": [
+    "vegetarian"
+   ],
+   "receiving_start": "08:00",
+   "receiving_end": "14:00",
+   "address_number": "162",
+   "address_street": "Graham Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "08:00 to 14:00 (say it naturally)",
+   "address": "162 Graham Avenue"
+  }
+ },
+ {
+  "id": "S032",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000031",
+  "name": "Luis",
+  "truth": {
+   "availability_days": [
+    "tue",
+    "wed"
+   ],
+   "availability_start": "17:00",
+   "availability_end": "20:00",
+   "neighborhoods": [
+    "Upper West Side"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-luna-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "tue, wed from 17:00 to 20:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S033",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000032",
+  "name": "Luis",
+  "truth": {
+   "shelter_name": "St. Mark's Pantry",
+   "capacity": 40,
+   "needs": [
+    "prepared meals",
+    "produce"
+   ],
+   "dietary_restrictions": [
+    "nut free"
+   ],
+   "receiving_start": "12:00",
+   "receiving_end": "20:00",
+   "address_number": "88",
+   "address_street": "Orchard Street"
+  },
+  "conditions": {
+   "voice": "aura-2-zeus-en",
+   "noise": "cafe",
+   "snr_db": 15.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "12:00 to 20:00 (say it naturally)",
+   "address": "88 Orchard Street"
+  }
+ },
+ {
+  "id": "S034",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000033",
+  "name": "Fatima",
+  "truth": {
+   "business_name": "Harlem Kitchen",
+   "item_keywords": [
+    [
+     "pastr",
+     "pastel",
+     "pastri"
+    ],
+    [
+     "muffin"
+    ]
+   ],
+   "quantity_number": 6,
+   "pickup_day": "tomorrow",
+   "pickup_start": "18:00",
+   "pickup_end": "20:00",
+   "address_number": "162",
+   "address_street": "Graham Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-luna-en",
+   "noise": "cafe",
+   "snr_db": 20.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "pastries and muffins",
+   "quantity": "6 boxes",
+   "day": "tomorrow",
+   "address": "162 Graham Avenue",
+   "window": "18:00 to 20:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S035",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000034",
+  "name": "Luis",
+  "truth": {
+   "business_name": "Nonna's Pasta",
+   "item_keywords": [
+    [
+     "fruit",
+     "fruta"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "today",
+   "pickup_start": "16:30",
+   "pickup_end": "18:00",
+   "address_number": "162",
+   "address_street": "Graham Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "cafe",
+   "snr_db": 15.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": true,
+  "said": {
+   "items": "fruit cups",
+   "quantity": "4 bags",
+   "day": "today",
+   "address": "162 Graham Avenue",
+   "window": "16:30 to 18:00 (24-hour clock; say it naturally, e.g. 'three to five pm')",
+   "note": "You have donated before; the agent may already know your business and address."
+  }
+ },
+ {
+  "id": "S036",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000035",
+  "name": "Omar",
+  "truth": {
+   "availability_days": [
+    "tue",
+    "fri"
+   ],
+   "availability_start": "13:00",
+   "availability_end": "17:00",
+   "neighborhoods": [
+    "Washington Heights",
+    "East Harlem"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "tue, fri from 13:00 to 17:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S037",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000036",
+  "name": "Wei",
+  "truth": {
+   "availability_days": [
+    "thu"
+   ],
+   "availability_start": "17:00",
+   "availability_end": "20:00",
+   "neighborhoods": [
+    "Upper West Side",
+    "South Bronx"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "street",
+   "snr_db": 15.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "thu from 17:00 to 20:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S038",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000037",
+  "name": "Tom",
+  "truth": {
+   "availability_days": [
+    "thu",
+    "sun"
+   ],
+   "availability_start": "13:00",
+   "availability_end": "17:00",
+   "neighborhoods": [
+    "Bed Stuy",
+    "Jackson Heights"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-andromeda-en",
+   "noise": "kitchen",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "thu, sun from 13:00 to 17:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S039",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000038",
+  "name": "Luis",
+  "truth": {
+   "business_name": "Mama's Soul Food",
+   "item_keywords": [
+    [
+     "fruit",
+     "fruta"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "today",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "301",
+   "address_street": "Malcolm X Boulevard"
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "fruit cups",
+   "quantity": "4 bags",
+   "day": "today",
+   "address": "301 Malcolm X Boulevard",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S040",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000039",
+  "name": "Omar",
+  "truth": {
+   "business_name": "Golden Wok",
+   "item_keywords": [
+    [
+     "soup",
+     "sopa"
+    ],
+    [
+     "chicken",
+     "pollo"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "tomorrow",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "chicken soup",
+   "quantity": "4 bags",
+   "day": "tomorrow",
+   "address": "47 Steinway Street",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S041",
+  "caller_type": "restaurant",
+  "language": "es",
+  "phone": "+15557000040",
+  "name": "Priya",
+  "truth": {
+   "business_name": "Sunrise Bagels",
+   "item_keywords": [
+    [
+     "sandwich",
+     "sándwich"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "tomorrow",
+   "pickup_start": "14:00",
+   "pickup_end": "16:00",
+   "address_number": "301",
+   "address_street": "Malcolm X Boulevard"
+  },
+  "conditions": {
+   "voice": "aura-2-alvaro-es",
+   "noise": "kitchen",
+   "snr_db": 20.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "items": "sándwiches",
+   "quantity": "cuatro bolsas",
+   "day": "mañana",
+   "address": "301 Malcolm X Boulevard",
+   "window": "14:00 to 16:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S042",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000041",
+  "name": "Aisha",
+  "truth": {
+   "shelter_name": "Riverside Family Shelter",
+   "capacity": 40,
+   "needs": [
+    "bread"
+   ],
+   "dietary_restrictions": [
+    "no pork"
+   ],
+   "receiving_start": "09:00",
+   "receiving_end": "17:00",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-arcas-en",
+   "noise": "kitchen",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "09:00 to 17:00 (say it naturally)",
+   "address": "1410 Amsterdam Avenue"
+  }
+ },
+ {
+  "id": "S043",
+  "caller_type": "restaurant",
+  "language": "es",
+  "phone": "+15557000042",
+  "name": "Luis",
+  "truth": {
+   "business_name": "Green Leaf Deli",
+   "item_keywords": [
+    [
+     "soup",
+     "sopa"
+    ],
+    [
+     "chicken",
+     "pollo"
+    ]
+   ],
+   "quantity_number": 10,
+   "pickup_day": "tomorrow",
+   "pickup_start": "18:00",
+   "pickup_end": "20:00",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-nestor-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "items": "sopa de pollo",
+   "quantity": "diez recipientes",
+   "day": "mañana",
+   "address": "1410 Amsterdam Avenue",
+   "window": "18:00 to 20:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S044",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000043",
+  "name": "Maria",
+  "truth": {
+   "business_name": "Harlem Kitchen",
+   "item_keywords": [
+    [
+     "pastr",
+     "pastel",
+     "pastri"
+    ],
+    [
+     "muffin"
+    ]
+   ],
+   "quantity_number": 2,
+   "pickup_day": "tomorrow",
+   "pickup_start": "15:00",
+   "pickup_end": "17:00",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "pastries and muffins",
+   "quantity": "2 large boxes",
+   "day": "tomorrow",
+   "address": "47 Steinway Street",
+   "window": "15:00 to 17:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S045",
+  "caller_type": "restaurant",
+  "language": "es",
+  "phone": "+15557000044",
+  "name": "Carlos",
+  "truth": {
+   "business_name": "Nonna's Pasta",
+   "item_keywords": [
+    [
+     "rice",
+     "arroz"
+    ],
+    [
+     "bean",
+     "frijol"
+    ]
+   ],
+   "quantity_number": 5,
+   "pickup_day": "today",
+   "pickup_start": "14:00",
+   "pickup_end": "16:00",
+   "address_number": "88",
+   "address_street": "Orchard Street"
+  },
+  "conditions": {
+   "voice": "aura-2-estrella-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "arroz con frijoles",
+   "quantity": "cinco bandejas",
+   "day": "hoy",
+   "address": "88 Orchard Street",
+   "window": "14:00 to 16:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S046",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000045",
+  "name": "James",
+  "truth": {
+   "business_name": "Corner Bakery",
+   "item_keywords": [
+    [
+     "sandwich",
+     "sándwich"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "tomorrow",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "301",
+   "address_street": "Malcolm X Boulevard"
+  },
+  "conditions": {
+   "voice": "aura-2-helena-en",
+   "noise": "cafe",
+   "snr_db": 15.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "sandwiches",
+   "quantity": "4 bags",
+   "day": "tomorrow",
+   "address": "301 Malcolm X Boulevard",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S047",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000046",
+  "name": "Tom",
+  "truth": {
+   "shelter_name": "Riverside Family Shelter",
+   "capacity": 60,
+   "needs": [
+    "prepared meals",
+    "produce"
+   ],
+   "dietary_restrictions": [
+    "halal"
+   ],
+   "receiving_start": "10:00",
+   "receiving_end": "19:00",
+   "address_number": "75",
+   "address_street": "Lenox Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-arcas-en",
+   "noise": "kitchen",
+   "snr_db": 20.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "10:00 to 19:00 (say it naturally)",
+   "address": "75 Lenox Avenue"
+  }
+ },
+ {
+  "id": "S048",
+  "caller_type": "shelter",
+  "language": "es",
+  "phone": "+15557000047",
+  "name": "Aisha",
+  "truth": {
+   "shelter_name": "St. Mark's Pantry",
+   "capacity": 80,
+   "needs": [
+    "bread"
+   ],
+   "dietary_restrictions": [
+    "vegetarian"
+   ],
+   "receiving_start": "08:00",
+   "receiving_end": "14:00",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-estrella-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "hours": "08:00 to 14:00 (say it naturally)",
+   "address": "47 Steinway Street"
+  }
+ },
+ {
+  "id": "S049",
+  "caller_type": "restaurant",
+  "language": "es",
+  "phone": "+15557000048",
+  "name": "Fatima",
+  "truth": {
+   "business_name": "Mama's Soul Food",
+   "item_keywords": [
+    [
+     "fruit",
+     "fruta"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "tomorrow",
+   "pickup_start": "15:00",
+   "pickup_end": "17:00",
+   "address_number": "2210",
+   "address_street": "Broadway"
+  },
+  "conditions": {
+   "voice": "aura-2-estrella-es",
+   "noise": "street",
+   "snr_db": 15.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": true,
+  "said": {
+   "items": "vasos de fruta",
+   "quantity": "cuatro bolsas",
+   "day": "mañana",
+   "address": "2210 Broadway",
+   "window": "15:00 to 17:00 (24-hour clock; say it naturally, e.g. 'three to five pm')",
+   "note": "You have donated before; the agent may already know your business and address."
+  }
+ },
+ {
+  "id": "S050",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000049",
+  "name": "Grace",
+  "truth": {
+   "availability_days": [
+    "mon"
+   ],
+   "availability_start": "10:00",
+   "availability_end": "16:00",
+   "neighborhoods": [
+    "East Harlem"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "availability": "mon from 10:00 to 16:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S051",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000050",
+  "name": "James",
+  "truth": {
+   "availability_days": [
+    "mon",
+    "tue"
+   ],
+   "availability_start": "17:00",
+   "availability_end": "20:00",
+   "neighborhoods": [
+    "Harlem"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "availability": "mon, tue from 17:00 to 20:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S052",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000051",
+  "name": "Carlos",
+  "truth": {
+   "business_name": "Casa Lupe",
+   "item_keywords": [
+    [
+     "pastr",
+     "pastel",
+     "pastri"
+    ],
+    [
+     "muffin"
+    ]
+   ],
+   "quantity_number": 10,
+   "pickup_day": "tomorrow",
+   "pickup_start": "14:00",
+   "pickup_end": "16:00",
+   "address_number": "301",
+   "address_street": "Malcolm X Boulevard"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "pastries and muffins",
+   "quantity": "10 containers",
+   "day": "tomorrow",
+   "address": "301 Malcolm X Boulevard",
+   "window": "14:00 to 16:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S053",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000052",
+  "name": "Maria",
+  "truth": {
+   "availability_days": [
+    "sun"
+   ],
+   "availability_start": "09:00",
+   "availability_end": "12:00",
+   "neighborhoods": [
+    "South Bronx",
+    "East Harlem"
+   ],
+   "has_car": true
+  },
+  "conditions": {
+   "voice": "aura-2-luna-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": true,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "sun from 09:00 to 12:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S054",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000053",
+  "name": "Priya",
+  "truth": {
+   "shelter_name": "Bridge Women's Center",
+   "capacity": 120,
+   "needs": [
+    "dairy"
+   ],
+   "dietary_restrictions": [],
+   "receiving_start": "12:00",
+   "receiving_end": "20:00",
+   "address_number": "519",
+   "address_street": "Atlantic Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "cafe",
+   "snr_db": 15.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "12:00 to 20:00 (say it naturally)",
+   "address": "519 Atlantic Avenue"
+  }
+ },
+ {
+  "id": "S055",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000054",
+  "name": "James",
+  "truth": {
+   "shelter_name": "Uptown Youth Shelter",
+   "capacity": 120,
+   "needs": [
+    "prepared meals",
+    "produce"
+   ],
+   "dietary_restrictions": [],
+   "receiving_start": "10:00",
+   "receiving_end": "19:00",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "10:00 to 19:00 (say it naturally)",
+   "address": "47 Steinway Street"
+  }
+ },
+ {
+  "id": "S056",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000055",
+  "name": "Aisha",
+  "truth": {
+   "business_name": "Corner Bakery",
+   "item_keywords": [
+    [
+     "fruit",
+     "fruta"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "tomorrow",
+   "pickup_start": "15:00",
+   "pickup_end": "17:00",
+   "address_number": "519",
+   "address_street": "Atlantic Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-arcas-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "fruit cups",
+   "quantity": "4 bags",
+   "day": "tomorrow",
+   "address": "519 Atlantic Avenue",
+   "window": "15:00 to 17:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S057",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000056",
+  "name": "Omar",
+  "truth": {
+   "availability_days": [
+    "mon",
+    "thu",
+    "fri"
+   ],
+   "availability_start": "13:00",
+   "availability_end": "17:00",
+   "neighborhoods": [
+    "Harlem",
+    "Bed Stuy"
+   ],
+   "has_car": true
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "street",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "mon, thu, fri from 13:00 to 17:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S058",
+  "caller_type": "shelter",
+  "language": "es",
+  "phone": "+15557000057",
+  "name": "Luis",
+  "truth": {
+   "shelter_name": "St. Mark's Pantry",
+   "capacity": 150,
+   "needs": [
+    "dairy"
+   ],
+   "dietary_restrictions": [
+    "nut free"
+   ],
+   "receiving_start": "10:00",
+   "receiving_end": "19:00",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-estrella-es",
+   "noise": "cafe",
+   "snr_db": 10.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "hours": "10:00 to 19:00 (say it naturally)",
+   "address": "47 Steinway Street"
+  }
+ },
+ {
+  "id": "S059",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000058",
+  "name": "Fatima",
+  "truth": {
+   "business_name": "Mama's Soul Food",
+   "item_keywords": [
+    [
+     "bagel"
+    ],
+    [
+     "cream cheese",
+     "queso crema"
+    ]
+   ],
+   "quantity_number": 5,
+   "pickup_day": "today",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "88",
+   "address_street": "Orchard Street"
+  },
+  "conditions": {
+   "voice": "aura-2-arcas-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "bagels and cream cheese",
+   "quantity": "5 trays",
+   "day": "today",
+   "address": "88 Orchard Street",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S060",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000059",
+  "name": "James",
+  "truth": {
+   "shelter_name": "Uptown Youth Shelter",
+   "capacity": 40,
+   "needs": [
+    "produce"
+   ],
+   "dietary_restrictions": [
+    "no pork"
+   ],
+   "receiving_start": "08:00",
+   "receiving_end": "14:00",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-arcas-en",
+   "noise": "kitchen",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "08:00 to 14:00 (say it naturally)",
+   "address": "1410 Amsterdam Avenue"
+  }
+ },
+ {
+  "id": "S061",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000060",
+  "name": "Aisha",
+  "truth": {
+   "business_name": "Sunrise Bagels",
+   "item_keywords": [
+    [
+     "pastr",
+     "pastel",
+     "pastri"
+    ],
+    [
+     "muffin"
+    ]
+   ],
+   "quantity_number": 2,
+   "pickup_day": "today",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "301",
+   "address_street": "Malcolm X Boulevard"
+  },
+  "conditions": {
+   "voice": "aura-2-arcas-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": true,
+  "said": {
+   "items": "pastries and muffins",
+   "quantity": "2 large boxes",
+   "day": "today",
+   "address": "301 Malcolm X Boulevard",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')",
+   "note": "You have donated before; the agent may already know your business and address."
+  }
+ },
+ {
+  "id": "S062",
+  "caller_type": "restaurant",
+  "language": "es",
+  "phone": "+15557000061",
+  "name": "Carlos",
+  "truth": {
+   "business_name": "Casa Lupe",
+   "item_keywords": [
+    [
+     "pastr",
+     "pastel",
+     "pastri"
+    ],
+    [
+     "muffin"
+    ]
+   ],
+   "quantity_number": 3,
+   "pickup_day": "tomorrow",
+   "pickup_start": "15:00",
+   "pickup_end": "17:00",
+   "address_number": "162",
+   "address_street": "Graham Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-alvaro-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "pasteles y muffins",
+   "quantity": "tres bandejas",
+   "day": "mañana",
+   "address": "162 Graham Avenue",
+   "window": "15:00 to 17:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S063",
+  "caller_type": "restaurant",
+  "language": "es",
+  "phone": "+15557000062",
+  "name": "Carlos",
+  "truth": {
+   "business_name": "Green Leaf Deli",
+   "item_keywords": [
+    [
+     "pastr",
+     "pastel",
+     "pastri"
+    ],
+    [
+     "muffin"
+    ]
+   ],
+   "quantity_number": 10,
+   "pickup_day": "today",
+   "pickup_start": "18:00",
+   "pickup_end": "20:00",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-nestor-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "pasteles y muffins",
+   "quantity": "diez recipientes",
+   "day": "hoy",
+   "address": "1410 Amsterdam Avenue",
+   "window": "18:00 to 20:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S064",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000063",
+  "name": "Aisha",
+  "truth": {
+   "business_name": "Harlem Kitchen",
+   "item_keywords": [
+    [
+     "pasta"
+    ],
+    [
+     "vegetable",
+     "verdura",
+     "veggie"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "tomorrow",
+   "pickup_start": "18:00",
+   "pickup_end": "20:00",
+   "address_number": "212",
+   "address_street": "West 112th Street"
+  },
+  "conditions": {
+   "voice": "aura-2-zeus-en",
+   "noise": "kitchen",
+   "snr_db": 20.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "pasta with vegetables",
+   "quantity": "4 bags",
+   "day": "tomorrow",
+   "address": "212 West 112th Street",
+   "window": "18:00 to 20:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S065",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000064",
+  "name": "Rosa",
+  "truth": {
+   "business_name": "Nonna's Pasta",
+   "item_keywords": [
+    [
+     "rice",
+     "arroz"
+    ],
+    [
+     "bean",
+     "frijol"
+    ]
+   ],
+   "quantity_number": 5,
+   "pickup_day": "tomorrow",
+   "pickup_start": "18:00",
+   "pickup_end": "20:00",
+   "address_number": "2210",
+   "address_street": "Broadway"
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "rice and beans",
+   "quantity": "5 trays",
+   "day": "tomorrow",
+   "address": "2210 Broadway",
+   "window": "18:00 to 20:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S066",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000065",
+  "name": "Carlos",
+  "truth": {
+   "business_name": "Corner Bakery",
+   "item_keywords": [
+    [
+     "rice",
+     "arroz"
+    ],
+    [
+     "bean",
+     "frijol"
+    ]
+   ],
+   "quantity_number": 6,
+   "pickup_day": "today",
+   "pickup_start": "15:00",
+   "pickup_end": "17:00",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-luna-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "rice and beans",
+   "quantity": "6 boxes",
+   "day": "today",
+   "address": "47 Steinway Street",
+   "window": "15:00 to 17:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S067",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000066",
+  "name": "Luis",
+  "truth": {
+   "availability_days": [
+    "tue",
+    "fri"
+   ],
+   "availability_start": "17:00",
+   "availability_end": "20:00",
+   "neighborhoods": [
+    "Williamsburg",
+    "Jackson Heights"
+   ],
+   "has_car": true
+  },
+  "conditions": {
+   "voice": "aura-2-luna-en",
+   "noise": "kitchen",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "availability": "tue, fri from 17:00 to 20:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S068",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000067",
+  "name": "Fatima",
+  "truth": {
+   "business_name": "Fresh Bowl",
+   "item_keywords": [
+    [
+     "sandwich",
+     "sándwich"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "today",
+   "pickup_start": "18:00",
+   "pickup_end": "20:00",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-zeus-en",
+   "noise": "kitchen",
+   "snr_db": 20.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "sandwiches",
+   "quantity": "4 bags",
+   "day": "today",
+   "address": "1410 Amsterdam Avenue",
+   "window": "18:00 to 20:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S069",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000068",
+  "name": "Omar",
+  "truth": {
+   "business_name": "Mama's Soul Food",
+   "item_keywords": [
+    [
+     "fruit",
+     "fruta"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "tomorrow",
+   "pickup_start": "14:00",
+   "pickup_end": "16:00",
+   "address_number": "88",
+   "address_street": "Orchard Street"
+  },
+  "conditions": {
+   "voice": "aura-2-andromeda-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "fruit cups",
+   "quantity": "4 bags",
+   "day": "tomorrow",
+   "address": "88 Orchard Street",
+   "window": "14:00 to 16:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S070",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000069",
+  "name": "Priya",
+  "truth": {
+   "business_name": "Golden Wok",
+   "item_keywords": [
+    [
+     "taco"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "tomorrow",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "38",
+   "address_street": "Bedford Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "street",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "tacos",
+   "quantity": "4 bags",
+   "day": "tomorrow",
+   "address": "38 Bedford Avenue",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S071",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000070",
+  "name": "Maria",
+  "truth": {
+   "business_name": "Sunrise Bagels",
+   "item_keywords": [
+    [
+     "soup",
+     "sopa"
+    ],
+    [
+     "chicken",
+     "pollo"
+    ]
+   ],
+   "quantity_number": 5,
+   "pickup_day": "tomorrow",
+   "pickup_start": "14:00",
+   "pickup_end": "16:00",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-arcas-en",
+   "noise": "kitchen",
+   "snr_db": 20.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "chicken soup",
+   "quantity": "5 trays",
+   "day": "tomorrow",
+   "address": "47 Steinway Street",
+   "window": "14:00 to 16:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S072",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000071",
+  "name": "Wei",
+  "truth": {
+   "shelter_name": "Riverside Family Shelter",
+   "capacity": 120,
+   "needs": [
+    "prepared meals"
+   ],
+   "dietary_restrictions": [
+    "no pork"
+   ],
+   "receiving_start": "09:00",
+   "receiving_end": "17:00",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "09:00 to 17:00 (say it naturally)",
+   "address": "47 Steinway Street"
+  }
+ },
+ {
+  "id": "S073",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000072",
+  "name": "James",
+  "truth": {
+   "business_name": "Green Leaf Deli",
+   "item_keywords": [
+    [
+     "sandwich",
+     "sándwich"
+    ]
+   ],
+   "quantity_number": 6,
+   "pickup_day": "today",
+   "pickup_start": "16:30",
+   "pickup_end": "18:00",
+   "address_number": "301",
+   "address_street": "Malcolm X Boulevard"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "cafe",
+   "snr_db": 20.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": true,
+  "said": {
+   "items": "sandwiches",
+   "quantity": "6 boxes",
+   "day": "today",
+   "address": "301 Malcolm X Boulevard",
+   "window": "16:30 to 18:00 (24-hour clock; say it naturally, e.g. 'three to five pm')",
+   "note": "You have donated before; the agent may already know your business and address."
+  }
+ },
+ {
+  "id": "S074",
+  "caller_type": "volunteer",
+  "language": "es",
+  "phone": "+15557000073",
+  "name": "Maria",
+  "truth": {
+   "availability_days": [
+    "mon"
+   ],
+   "availability_start": "09:00",
+   "availability_end": "12:00",
+   "neighborhoods": [
+    "East Harlem",
+    "Washington Heights"
+   ],
+   "has_car": true
+  },
+  "conditions": {
+   "voice": "aura-2-alvaro-es",
+   "noise": "street",
+   "snr_db": 20.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "mon from 09:00 to 12:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S075",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000074",
+  "name": "Grace",
+  "truth": {
+   "availability_days": [
+    "tue",
+    "thu",
+    "fri"
+   ],
+   "availability_start": "09:00",
+   "availability_end": "12:00",
+   "neighborhoods": [
+    "Astoria",
+    "Harlem"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "kitchen",
+   "snr_db": 15.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "tue, thu, fri from 09:00 to 12:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S076",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000075",
+  "name": "Priya",
+  "truth": {
+   "business_name": "Corner Bakery",
+   "item_keywords": [
+    [
+     "rice",
+     "arroz"
+    ],
+    [
+     "bean",
+     "frijol"
+    ]
+   ],
+   "quantity_number": 5,
+   "pickup_day": "tomorrow",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "75",
+   "address_street": "Lenox Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-luna-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "rice and beans",
+   "quantity": "5 trays",
+   "day": "tomorrow",
+   "address": "75 Lenox Avenue",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S077",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000076",
+  "name": "Grace",
+  "truth": {
+   "shelter_name": "Riverside Family Shelter",
+   "capacity": 80,
+   "needs": [
+    "produce"
+   ],
+   "dietary_restrictions": [
+    "nut free"
+   ],
+   "receiving_start": "08:00",
+   "receiving_end": "14:00",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-andromeda-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "08:00 to 14:00 (say it naturally)",
+   "address": "47 Steinway Street"
+  }
+ },
+ {
+  "id": "S078",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000077",
+  "name": "Wei",
+  "truth": {
+   "business_name": "Fresh Bowl",
+   "item_keywords": [
+    [
+     "bread",
+     "pan",
+     "loaves",
+     "loaf"
+    ]
+   ],
+   "quantity_number": 2,
+   "pickup_day": "tomorrow",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "519",
+   "address_street": "Atlantic Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-andromeda-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "loaves of bread",
+   "quantity": "2 large boxes",
+   "day": "tomorrow",
+   "address": "519 Atlantic Avenue",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S079",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000078",
+  "name": "Grace",
+  "truth": {
+   "business_name": "Mama's Soul Food",
+   "item_keywords": [
+    [
+     "rice",
+     "arroz"
+    ],
+    [
+     "bean",
+     "frijol"
+    ]
+   ],
+   "quantity_number": 10,
+   "pickup_day": "tomorrow",
+   "pickup_start": "18:00",
+   "pickup_end": "20:00",
+   "address_number": "519",
+   "address_street": "Atlantic Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-arcas-en",
+   "noise": "cafe",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "rice and beans",
+   "quantity": "10 containers",
+   "day": "tomorrow",
+   "address": "519 Atlantic Avenue",
+   "window": "18:00 to 20:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S080",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000079",
+  "name": "Fatima",
+  "truth": {
+   "business_name": "Golden Wok",
+   "item_keywords": [
+    [
+     "bagel"
+    ],
+    [
+     "cream cheese",
+     "queso crema"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "tomorrow",
+   "pickup_start": "16:30",
+   "pickup_end": "18:00",
+   "address_number": "88",
+   "address_street": "Orchard Street"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "street",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "bagels and cream cheese",
+   "quantity": "4 bags",
+   "day": "tomorrow",
+   "address": "88 Orchard Street",
+   "window": "16:30 to 18:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S081",
+  "caller_type": "restaurant",
+  "language": "es",
+  "phone": "+15557000080",
+  "name": "Rosa",
+  "truth": {
+   "business_name": "Sunrise Bagels",
+   "item_keywords": [
+    [
+     "pastr",
+     "pastel",
+     "pastri"
+    ],
+    [
+     "muffin"
+    ]
+   ],
+   "quantity_number": 5,
+   "pickup_day": "tomorrow",
+   "pickup_start": "18:00",
+   "pickup_end": "20:00",
+   "address_number": "2210",
+   "address_street": "Broadway"
+  },
+  "conditions": {
+   "voice": "aura-2-celeste-es",
+   "noise": "cafe",
+   "snr_db": 15.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "items": "pasteles y muffins",
+   "quantity": "cinco bandejas",
+   "day": "mañana",
+   "address": "2210 Broadway",
+   "window": "18:00 to 20:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S082",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000081",
+  "name": "Carlos",
+  "truth": {
+   "availability_days": [
+    "mon",
+    "thu",
+    "fri"
+   ],
+   "availability_start": "09:00",
+   "availability_end": "12:00",
+   "neighborhoods": [
+    "Astoria",
+    "Washington Heights"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "kitchen",
+   "snr_db": 20.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "mon, thu, fri from 09:00 to 12:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S083",
+  "caller_type": "restaurant",
+  "language": "es",
+  "phone": "+15557000082",
+  "name": "Wei",
+  "truth": {
+   "business_name": "Green Leaf Deli",
+   "item_keywords": [
+    [
+     "bagel"
+    ],
+    [
+     "cream cheese",
+     "queso crema"
+    ]
+   ],
+   "quantity_number": 2,
+   "pickup_day": "today",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "301",
+   "address_street": "Malcolm X Boulevard"
+  },
+  "conditions": {
+   "voice": "aura-2-celeste-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "bagels con queso crema",
+   "quantity": "dos cajas grandes",
+   "day": "hoy",
+   "address": "301 Malcolm X Boulevard",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S084",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000083",
+  "name": "Rosa",
+  "truth": {
+   "business_name": "Harlem Kitchen",
+   "item_keywords": [
+    [
+     "salad",
+     "ensalada"
+    ]
+   ],
+   "quantity_number": 10,
+   "pickup_day": "tomorrow",
+   "pickup_start": "14:00",
+   "pickup_end": "16:00",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-zeus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "fresh salads",
+   "quantity": "10 containers",
+   "day": "tomorrow",
+   "address": "47 Steinway Street",
+   "window": "14:00 to 16:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S085",
+  "caller_type": "shelter",
+  "language": "es",
+  "phone": "+15557000084",
+  "name": "Carlos",
+  "truth": {
+   "shelter_name": "Uptown Youth Shelter",
+   "capacity": 40,
+   "needs": [
+    "prepared meals"
+   ],
+   "dietary_restrictions": [
+    "vegetarian"
+   ],
+   "receiving_start": "12:00",
+   "receiving_end": "20:00",
+   "address_number": "212",
+   "address_street": "West 112th Street"
+  },
+  "conditions": {
+   "voice": "aura-2-alvaro-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "12:00 to 20:00 (say it naturally)",
+   "address": "212 West 112th Street"
+  }
+ },
+ {
+  "id": "S086",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000085",
+  "name": "James",
+  "truth": {
+   "availability_days": [
+    "mon",
+    "sun"
+   ],
+   "availability_start": "13:00",
+   "availability_end": "17:00",
+   "neighborhoods": [
+    "East Harlem",
+    "Washington Heights"
+   ],
+   "has_car": true
+  },
+  "conditions": {
+   "voice": "aura-2-helena-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "mon, sun from 13:00 to 17:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S087",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000086",
+  "name": "Fatima",
+  "truth": {
+   "shelter_name": "Riverside Family Shelter",
+   "capacity": 150,
+   "needs": [
+    "produce"
+   ],
+   "dietary_restrictions": [
+    "halal"
+   ],
+   "receiving_start": "09:00",
+   "receiving_end": "17:00",
+   "address_number": "47",
+   "address_street": "Steinway Street"
+  },
+  "conditions": {
+   "voice": "aura-2-apollo-en",
+   "noise": "street",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "hours": "09:00 to 17:00 (say it naturally)",
+   "address": "47 Steinway Street"
+  }
+ },
+ {
+  "id": "S088",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000087",
+  "name": "Priya",
+  "truth": {
+   "shelter_name": "St. Mark's Pantry",
+   "capacity": 80,
+   "needs": [
+    "dairy"
+   ],
+   "dietary_restrictions": [
+    "vegetarian"
+   ],
+   "receiving_start": "08:00",
+   "receiving_end": "14:00",
+   "address_number": "75",
+   "address_street": "Lenox Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-helena-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "08:00 to 14:00 (say it naturally)",
+   "address": "75 Lenox Avenue"
+  }
+ },
+ {
+  "id": "S089",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000088",
+  "name": "Priya",
+  "truth": {
+   "shelter_name": "Bridge Women's Center",
+   "capacity": 150,
+   "needs": [
+    "produce"
+   ],
+   "dietary_restrictions": [
+    "nut free"
+   ],
+   "receiving_start": "12:00",
+   "receiving_end": "20:00",
+   "address_number": "162",
+   "address_street": "Graham Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "12:00 to 20:00 (say it naturally)",
+   "address": "162 Graham Avenue"
+  }
+ },
+ {
+  "id": "S090",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000089",
+  "name": "James",
+  "truth": {
+   "shelter_name": "Uptown Youth Shelter",
+   "capacity": 40,
+   "needs": [
+    "prepared meals"
+   ],
+   "dietary_restrictions": [
+    "no pork"
+   ],
+   "receiving_start": "08:00",
+   "receiving_end": "14:00",
+   "address_number": "301",
+   "address_street": "Malcolm X Boulevard"
+  },
+  "conditions": {
+   "voice": "aura-2-andromeda-en",
+   "noise": "street",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "08:00 to 14:00 (say it naturally)",
+   "address": "301 Malcolm X Boulevard"
+  }
+ },
+ {
+  "id": "S091",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000090",
+  "name": "Carlos",
+  "truth": {
+   "shelter_name": "Hope House",
+   "capacity": 80,
+   "needs": [
+    "prepared meals",
+    "produce"
+   ],
+   "dietary_restrictions": [],
+   "receiving_start": "09:00",
+   "receiving_end": "17:00",
+   "address_number": "212",
+   "address_street": "West 112th Street"
+  },
+  "conditions": {
+   "voice": "aura-2-luna-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "09:00 to 17:00 (say it naturally)",
+   "address": "212 West 112th Street"
+  }
+ },
+ {
+  "id": "S092",
+  "caller_type": "volunteer",
+  "language": "en",
+  "phone": "+15557000091",
+  "name": "Carlos",
+  "truth": {
+   "availability_days": [
+    "mon",
+    "wed"
+   ],
+   "availability_start": "10:00",
+   "availability_end": "16:00",
+   "neighborhoods": [
+    "Upper West Side",
+    "Jackson Heights"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": true,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "availability": "mon, wed from 10:00 to 16:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S093",
+  "caller_type": "volunteer",
+  "language": "es",
+  "phone": "+15557000092",
+  "name": "Tom",
+  "truth": {
+   "availability_days": [
+    "wed",
+    "sat",
+    "sun"
+   ],
+   "availability_start": "13:00",
+   "availability_end": "17:00",
+   "neighborhoods": [
+    "Jackson Heights",
+    "South Bronx"
+   ],
+   "has_car": true
+  },
+  "conditions": {
+   "voice": "aura-2-alvaro-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "wed, sat, sun from 13:00 to 17:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S094",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000093",
+  "name": "Tom",
+  "truth": {
+   "business_name": "Harlem Kitchen",
+   "item_keywords": [
+    [
+     "taco"
+    ]
+   ],
+   "quantity_number": 3,
+   "pickup_day": "tomorrow",
+   "pickup_start": "14:00",
+   "pickup_end": "16:00",
+   "address_number": "301",
+   "address_street": "Malcolm X Boulevard"
+  },
+  "conditions": {
+   "voice": "aura-2-thalia-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "items": "tacos",
+   "quantity": "3 trays",
+   "day": "tomorrow",
+   "address": "301 Malcolm X Boulevard",
+   "window": "14:00 to 16:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S095",
+  "caller_type": "restaurant",
+  "language": "es",
+  "phone": "+15557000094",
+  "name": "James",
+  "truth": {
+   "business_name": "Nonna's Pasta",
+   "item_keywords": [
+    [
+     "sandwich",
+     "sándwich"
+    ]
+   ],
+   "quantity_number": 4,
+   "pickup_day": "today",
+   "pickup_start": "18:00",
+   "pickup_end": "20:00",
+   "address_number": "38",
+   "address_street": "Bedford Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-celeste-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "sándwiches",
+   "quantity": "cuatro bolsas",
+   "day": "hoy",
+   "address": "38 Bedford Avenue",
+   "window": "18:00 to 20:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S096",
+  "caller_type": "volunteer",
+  "language": "es",
+  "phone": "+15557000095",
+  "name": "Wei",
+  "truth": {
+   "availability_days": [
+    "tue",
+    "fri",
+    "sun"
+   ],
+   "availability_start": "17:00",
+   "availability_end": "20:00",
+   "neighborhoods": [
+    "Bed Stuy"
+   ],
+   "has_car": false
+  },
+  "conditions": {
+   "voice": "aura-2-alvaro-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "availability": "tue, fri, sun from 17:00 to 20:00 (say it naturally)"
+  }
+ },
+ {
+  "id": "S097",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000096",
+  "name": "Rosa",
+  "truth": {
+   "shelter_name": "Riverside Family Shelter",
+   "capacity": 80,
+   "needs": [
+    "bread"
+   ],
+   "dietary_restrictions": [
+    "halal"
+   ],
+   "receiving_start": "08:00",
+   "receiving_end": "14:00",
+   "address_number": "38",
+   "address_street": "Bedford Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-luna-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "08:00 to 14:00 (say it naturally)",
+   "address": "38 Bedford Avenue"
+  }
+ },
+ {
+  "id": "S098",
+  "caller_type": "shelter",
+  "language": "en",
+  "phone": "+15557000097",
+  "name": "Rosa",
+  "truth": {
+   "shelter_name": "St. Mark's Pantry",
+   "capacity": 120,
+   "needs": [
+    "prepared meals"
+   ],
+   "dietary_restrictions": [
+    "halal"
+   ],
+   "receiving_start": "09:00",
+   "receiving_end": "17:00",
+   "address_number": "1410",
+   "address_street": "Amsterdam Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-orpheus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "hours": "09:00 to 17:00 (say it naturally)",
+   "address": "1410 Amsterdam Avenue"
+  }
+ },
+ {
+  "id": "S099",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000098",
+  "name": "Fatima",
+  "truth": {
+   "business_name": "Mama's Soul Food",
+   "item_keywords": [
+    [
+     "salad",
+     "ensalada"
+    ]
+   ],
+   "quantity_number": 10,
+   "pickup_day": "tomorrow",
+   "pickup_start": "15:00",
+   "pickup_end": "17:00",
+   "address_number": "75",
+   "address_street": "Lenox Avenue"
+  },
+  "conditions": {
+   "voice": "aura-2-zeus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": false
+  },
+  "returning": false,
+  "said": {
+   "items": "fresh salads",
+   "quantity": "10 containers",
+   "day": "tomorrow",
+   "address": "75 Lenox Avenue",
+   "window": "15:00 to 17:00 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ },
+ {
+  "id": "S100",
+  "caller_type": "restaurant",
+  "language": "en",
+  "phone": "+15557000099",
+  "name": "Carlos",
+  "truth": {
+   "business_name": "Golden Wok",
+   "item_keywords": [
+    [
+     "salad",
+     "ensalada"
+    ]
+   ],
+   "quantity_number": 3,
+   "pickup_day": "today",
+   "pickup_start": "13:00",
+   "pickup_end": "15:30",
+   "address_number": "212",
+   "address_street": "West 112th Street"
+  },
+  "conditions": {
+   "voice": "aura-2-luna-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": true
+  },
+  "returning": false,
+  "said": {
+   "items": "fresh salads",
+   "quantity": "3 trays",
+   "day": "today",
+   "address": "212 West 112th Street",
+   "window": "13:00 to 15:30 (24-hour clock; say it naturally, e.g. 'three to five pm')"
+  }
+ }
+]

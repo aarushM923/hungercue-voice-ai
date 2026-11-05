@@ -105,6 +105,21 @@ class Repo:
         async with self.db.session() as s:
             return list(await s.scalars(select(Volunteer).where(Volunteer.active.is_(True))))
 
+    async def restaurant_by_phone(self, phone: str) -> Restaurant | None:
+        async with self.db.session() as s:
+            return await s.scalar(select(Restaurant).where(Restaurant.phone == phone))
+
+    async def shelter_by_phone(self, phone: str) -> Shelter | None:
+        async with self.db.session() as s:
+            return await s.scalar(select(Shelter).where(Shelter.phone == phone))
+
+    async def pickup_for_call(self, call_sid: str) -> Pickup | None:
+        """The pickup booked during a given call (latest, if the caller booked twice)."""
+        async with self.db.session() as s:
+            return await s.scalar(
+                select(Pickup).where(Pickup.call_sid == call_sid).order_by(Pickup.id.desc()).limit(1)
+            )
+
     async def get_volunteer(self, volunteer_id: int) -> Volunteer | None:
         async with self.db.session() as s:
             return await s.get(Volunteer, volunteer_id)
