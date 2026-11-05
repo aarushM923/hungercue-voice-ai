@@ -1,0 +1,11 @@
+.venv
+.env
+google-credentials.json
+.git
+.github
+tests
+evals
+recordings
+*.db
+__pycache__
+.pytest_cache

@@ -1,0 +1,47 @@
+# Fly.io configuration for HungerCue v2. NOT DEPLOYED YET.
+#
+# Steps when it's time (each one needs explicit approval first):
+#   1. fly launch --no-deploy            (creates the app; pick a name, region ewr = New Jersey, near NYC callers)
+#   2. fly volumes create hungercue_data --size 1 --region ewr
+#   3. Postgres and Redis: e.g. `fly postgres create` and Upstash Redis via `fly redis create`,
+#      then set DATABASE_URL (postgresql+asyncpg://...) and REDIS_URL.
+#   4. fly secrets set OPENAI_API_KEY=... DEEPGRAM_API_KEY=... TWILIO_ACCOUNT_SID=... TWILIO_AUTH_TOKEN=...
+#      DASHBOARD_PASSWORD=... COORDINATOR_PHONE=... PUBLIC_BASE_URL=https://<app>.fly.dev
+#      (Google Sheets: GOOGLE_CREDENTIALS_JSON pointing at a file written from a secret.)
+#   5. fly deploy
+#   6. Only then, and only with approval: point the Twilio number's voice webhook to
+#      https://<app>.fly.dev/voice and its messaging webhook to https://<app>.fly.dev/sms.
+
+app = "hungercue"
+primary_region = "ewr"
+
+[build]
+
+[env]
+  PORT = "8080"
+  RECORDINGS_DIR = "/data/recordings"
+  SMS_ENABLED = "0"  # flip to 1 only after Twilio toll-free verification is approved
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # A phone agent must answer instantly: never scale to zero (a cold start would
+  # leave a caller in silence), and keep one machine always running.
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    path = "/healthz"
+    timeout = "5s"
+
+[mounts]
+  source = "hungercue_data"
+  destination = "/data"
+
+[[vm]]
+  size = "shared-cpu-2x"
+  memory = "1gb"
