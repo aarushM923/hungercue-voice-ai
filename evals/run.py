@@ -6,7 +6,7 @@
 
 Options:
   --concurrency N     calls in parallel (default 6; each call runs in real time)
-  --check-baseline    exit with an error if results regress vs evals/baseline.json (CI uses this)
+  --check-baseline    exit with an error if results regress vs evals/baseline-<suite>.json (CI uses this)
   --write-baseline    save this run's metrics as the new baseline
 
 Needs OPENAI_API_KEY and DEEPGRAM_API_KEY in .env. Makes no phone calls and
@@ -41,7 +41,11 @@ from hungercue.timeutil import now_local
 from hungercue.tts.aura import AuraTTS
 
 EVAL_DIR = Path(__file__).parent
-BASELINE = EVAL_DIR / "baseline.json"
+
+
+def baseline_path(suite: str) -> Path:
+    """One baseline per suite: a smoke run must be compared with a smoke run (same 20 calls)."""
+    return EVAL_DIR / f"baseline-{suite}.json"
 
 
 def pick(suite: str) -> list:
@@ -118,14 +122,15 @@ async def main(args: argparse.Namespace) -> int:
     print(json.dumps({k: metrics[k] for k in ("slot_accuracy", "classification_accuracy", "task_completion_rate",
                                               "latency_ms", "barge_in", "cost_usd")}, indent=1))
 
+    baseline = baseline_path(args.suite)
     if args.write_baseline:
-        BASELINE.write_text(json.dumps(metrics, indent=1))
-        print(f"Baseline updated: {BASELINE}")
+        baseline.write_text(json.dumps(metrics, indent=1))
+        print(f"Baseline updated: {baseline}")
     if args.check_baseline:
-        if not BASELINE.exists():
-            print("No baseline yet; nothing to compare against.")
+        if not baseline.exists():
+            print(f"No baseline yet ({baseline.name}); nothing to compare against.")
             return 0
-        problems = report.compare(metrics, json.loads(BASELINE.read_text()))
+        problems = report.compare(metrics, json.loads(baseline.read_text()))
         for p in problems:
             print(f"REGRESSION: {p}")
         return 1 if problems else 0
