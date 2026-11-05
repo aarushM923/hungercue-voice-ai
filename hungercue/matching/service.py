@@ -76,25 +76,33 @@ class Matcher:
         log.info("pickup %s matched: %s", p.id, best)
         return best
 
-    async def rebalance_day(self, day: datetime) -> BatchResult:
+    async def rebalance_day(self, day: datetime) -> tuple[BatchResult, list[int]]:
         """Hungarian re-optimisation of a day's not-yet-accepted pickups.
 
         Only pickups no volunteer has accepted are moved, so nobody who said
-        YES gets bumped. Returns the batch result; the caller sends new offers.
+        YES gets bumped. Returns the batch result plus the ids of pickups that
+        need a NEW offer text: an offer still going to the same volunteer is
+        left as it was, so nobody gets the same text twice.
         """
         start = day.replace(hour=0, minute=0, second=0, microsecond=0)
         todays = await self.repo.pickups_between(start, start + timedelta(days=1))
         movable = [p for p in todays if p.status in ("pending_match", "unmatched", "offered")]
+        before = {p.id: (p.status, p.volunteer_id) for p in movable}
         # Free the movable pickups' holds before computing capacity and busy times.
         for p in movable:
             await self.repo.update_pickup(p.id, status="pending_match")
         shelters, volunteers = await self._candidates(start, skip_pickup=None)
         result = hungarian_batch([donation_info(p) for p in movable], shelters, volunteers, self.weights)
+        needs_offer: list[int] = []
         for p in movable:
             pair = result.assignments.get(p.id)
-            if pair:
+            if pair is None:
+                await self.repo.update_pickup(p.id, status="unmatched", volunteer_id=None)
+            elif before[p.id] == ("offered", pair.volunteer_id):
+                # Same volunteer already has the offer: keep its clock and history.
+                await self.repo.update_pickup(p.id, status="offered", shelter_id=pair.shelter_id, match_score=pair.score)
+            else:
                 await self.repo.update_pickup(p.id, shelter_id=pair.shelter_id, volunteer_id=pair.volunteer_id,
                                               match_score=pair.score, offered_volunteer_ids=[])
-            else:
-                await self.repo.update_pickup(p.id, status="unmatched", volunteer_id=None)
-        return result
+                needs_offer.append(p.id)
+        return result, needs_offer

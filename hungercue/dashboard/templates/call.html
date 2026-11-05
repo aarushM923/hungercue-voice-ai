@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Call {{ call.call_sid[-6:] }} · HungerCue{% endblock %}
+{% block head %}
+<style>
+  .transcript { list-style: none; padding: 0; margin: 0; }
+  .transcript li { padding: 8px 0; border-bottom: 1px solid var(--grid); display: grid; grid-template-columns: 70px 1fr; gap: 10px; }
+  .transcript .who { color: var(--text-secondary); font-size: 13px; font-weight: 600; }
+  .transcript .agent .who { color: var(--text-muted); }
+  dl.meta { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0; font-size: 14px; }
+  dl.meta dt { color: var(--text-secondary); }
+  dl.meta dd { margin: 0; }
+  audio { width: 100%; margin-top: 8px; }
+</style>
+{% endblock %}
+{% block body %}
+<header class="top">
+  <h1>Call from {{ call.from_number or 'hidden number' }}</h1>
+  <a href="/dashboard">&larr; Dashboard</a>
+</header>
+
+<section class="card">
+  <dl class="meta">
+    <dt>Started</dt><dd>{{ call.started_at.strftime('%a %b %d, %H:%M:%S') }}</dd>
+    <dt>Ended</dt><dd>{{ call.ended_at.strftime('%H:%M:%S') if call.ended_at else 'in progress' }}</dd>
+    <dt>Caller type</dt><dd>{{ call.caller_type or '—' }}</dd>
+    <dt>Outcome</dt><dd>{{ call.outcome or '—' }}</dd>
+    <dt>Language</dt><dd>{{ call.language }}</dd>
+    <dt>Estimated cost</dt><dd>${{ '%.4f'|format(call.cost_usd) }}</dd>
+    {% if call.voicemail_url %}<dt>Voicemail</dt><dd><a href="{{ call.voicemail_url }}" rel="noreferrer">Twilio recording</a> <span class="muted">(Twilio login required)</span></dd>{% endif %}
+  </dl>
+</section>
+
+<section class="card">
+  <h2>Recording</h2>
+  {% if has_audio %}
+    <p class="secondary" style="margin:0">Left channel: caller. Right channel: agent.</p>
+    <audio controls preload="none" src="/dashboard/calls/{{ call.call_sid }}/audio"></audio>
+  {% else %}
+    <p class="muted" style="margin:0">No audio stored{% if not call.keep_audio %} (deleted after {{ retention_days }} days unless the caller agrees otherwise){% endif %}.</p>
+  {% endif %}
+  <form method="post" action="/dashboard/calls/{{ call.call_sid }}/keep-audio" style="margin-top:12px">
+    {% if call.keep_audio %}
+      <p style="margin:0 0 8px"><span class="ok">✓</span> Caller agreed to keep this audio past {{ retention_days }} days.</p>
+      <button type="submit">Withdraw consent (delete with normal retention)</button>
+    {% else %}
+      <button type="submit">Caller agreed to keep audio</button>
+    {% endif %}
+  </form>
+</section>
+
+<section class="card">
+  <h2>Transcript</h2>
+  {% if call.transcript %}
+  <ol class="transcript">
+    {% for t in call.transcript %}
+      <li class="{{ t.role }}"><span class="who">{{ 'Caller' if t.role == 'caller' else 'Agent' }}</span><span>{{ t.text }}</span></li>
+    {% endfor %}
+  </ol>
+  {% else %}
+  <p class="muted">No transcript.</p>
+  {% endif %}
+</section>
+
+{% if turns %}
+<section class="card">
+  <h2>Response time per reply</h2>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Reply</th><th class="num">STT</th><th class="num">Endpoint</th><th class="num">LLM</th><th class="num">TTS</th><th class="num">Other</th><th class="num">Total</th><th>Interrupted</th></tr></thead>
+    <tbody>
+    {% for r in turns %}
+      <tr><td>{{ r.label }}</td><td class="num">{{ r.stt_ms }}</td><td class="num">{{ r.endpoint_ms }}</td>
+        <td class="num">{{ r.llm_first_token_ms }}</td><td class="num">{{ r.tts_first_byte_ms }}</td><td class="num">{{ r.other_ms }}</td>
+        <td class="num"><strong>{{ r.v2v_ms }}</strong></td><td>{{ 'yes' if r.interrupted else '' }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+</section>
+{% endif %}
+{% endblock %}

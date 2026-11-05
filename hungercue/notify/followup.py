@@ -126,8 +126,17 @@ class FollowUp:
                 )
             await self._changed(pickup_id)
             return False
+        return await self.send_offer(pickup_id, now)
+
+    async def send_offer(self, pickup_id: int, now: datetime | None = None) -> bool:
+        """Text the offer to the volunteer ALREADY assigned to the pickup.
+
+        Separate from offer_next so the dashboard's Hungarian rebalance can send
+        offers for its own assignments without greedy matching overriding them.
+        """
         p = await self.repo.get_pickup(pickup_id)
-        assert p is not None and p.volunteer is not None
+        if p is None or p.volunteer is None:
+            return False
         await self.repo.update_pickup(
             pickup_id,
             status="offered",

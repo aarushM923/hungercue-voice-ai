@@ -18,6 +18,7 @@ from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconn
 from fastapi.responses import Response
 
 from hungercue.config import Settings, get_settings
+from hungercue.dashboard.routes import build_router
 from hungercue.pipeline.call_session import CallSession
 from hungercue.services import AppContainer, build_container
 from hungercue.telephony import twilio_stream as ts
@@ -72,6 +73,7 @@ def create_app(settings: Settings | None = None, builder: ContainerBuilder = bui
 
     app = FastAPI(title="HungerCue v2", lifespan=lifespan)
     app.state.settings = settings
+    app.include_router(build_router(settings))  # /dashboard (password protected)
 
     def container_of(request: Request | WebSocket) -> AppContainer:
         return request.app.state.container  # type: ignore[no-any-return]

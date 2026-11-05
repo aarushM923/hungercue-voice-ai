@@ -67,8 +67,21 @@ async def test_rebalance_day_uses_hungarian_and_keeps_accepted(repo: Repo) -> No
     locked = await new_pickup(repo, hour=9)
     await repo.update_pickup(locked, status="accepted", volunteer_id=ana)
     p1, p2 = await new_pickup(repo, hour=15), await new_pickup(repo, hour=15)
-    result = await m.rebalance_day(datetime(2026, 11, 3))
-    assert set(result.assignments) == {p1, p2}
+    result, needs_offer = await m.rebalance_day(datetime(2026, 11, 3))
+    assert set(result.assignments) == {p1, p2} and set(needs_offer) == {p1, p2}
     vols = {(await repo.get_pickup(p)).volunteer_id for p in (p1, p2)}
     assert vols == {ana, ben}  # two simultaneous pickups need two different people
     assert (await repo.get_pickup(locked)).status == "accepted"
+
+
+async def test_rebalance_does_not_reoffer_to_same_volunteer(repo: Repo) -> None:
+    ana, _ = await seed(repo)
+    m = Matcher(repo, S)
+    pid = await new_pickup(repo)
+    best = await m.match(pid)
+    await repo.update_pickup(pid, status="offered", offered_at=datetime(2026, 11, 3, 12),
+                             offered_volunteer_ids=[best.volunteer_id])
+    _, needs_offer = await m.rebalance_day(datetime(2026, 11, 3))
+    p = await repo.get_pickup(pid)
+    assert needs_offer == [] and p.status == "offered" and p.offered_at == datetime(2026, 11, 3, 12)
+    assert p.offered_volunteer_ids == [best.volunteer_id]

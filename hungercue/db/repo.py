@@ -235,6 +235,12 @@ class Repo:
             if t is not None:
                 t.interrupted = True
 
+    async def recent_turns(self, limit: int = 40) -> list[Turn]:
+        """Latest completed turns, oldest first (for the latency chart)."""
+        async with self.db.session() as s:
+            rows = list(await s.scalars(select(Turn).order_by(Turn.id.desc()).limit(limit)))
+            return rows[::-1]
+
     async def turns_since(self, since: datetime) -> list[Turn]:
         async with self.db.session() as s:
             rows = await s.scalars(select(Turn).where(Turn.created_at >= since).order_by(Turn.created_at))

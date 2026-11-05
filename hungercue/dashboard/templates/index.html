@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+  .chart-head { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; justify-content: space-between; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--text-secondary); margin: 0 0 8px; padding: 0; list-style: none; }
+  .legend .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .chart-box { position: relative; }
+  #latency-chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  #latency-chart text { font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--text-muted); font-variant-numeric: tabular-nums; }
+  #latency-chart .target-label { fill: var(--text-secondary); }
+  .tooltip {
+    position: absolute; pointer-events: none; display: none; z-index: 2;
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 10px; font-size: 13px; box-shadow: 0 4px 16px rgba(0,0,0,.12); min-width: 190px;
+  }
+  .tooltip .row { display: flex; justify-content: space-between; gap: 12px; color: var(--text-secondary); }
+  .tooltip .row b { color: var(--text-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .tooltip .key { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
+  details summary { cursor: pointer; color: var(--text-secondary); font-size: 14px; margin-top: 10px; }
+  .daynav { display: flex; gap: 12px; align-items: center; font-size: 14px; }
+</style>
+{% endblock %}
+{% block body %}
+<header class="top">
+  <h1>HungerCue dispatch</h1>
+  <nav class="daynav">
+    <a href="?day={{ prev_day.strftime('%Y-%m-%d') }}">&larr; {{ prev_day.strftime('%b %d') }}</a>
+    <strong>{{ day.strftime('%A, %b %d') }}</strong>
+    <a href="?day={{ next_day.strftime('%Y-%m-%d') }}">{{ next_day.strftime('%b %d') }} &rarr;</a>
+  </nav>
+</header>
+
+{% if not sms_enabled %}
+<p class="notice"><strong>Texting is pending toll-free verification.</strong>
+  Offers, confirmations and reminders are recorded below but not sent until verification is approved.</p>
+{% endif %}
+
+<section class="tiles" aria-label="Summary">
+  <div class="tile"><div class="label">Pickups this day</div><div class="value">{{ pickups|length }}</div>
+    <div class="note">{{ counts.get('accepted', 0) }} confirmed &middot; {{ counts.get('unmatched', 0) }} need a coordinator</div></div>
+  <div class="tile"><div class="label">Median response time</div>
+    <div class="value">{{ '%d ms'|format(stats.p50) if stats.p50 is not none else '—' }}</div>
+    <div class="note">{% if stats.p50 is not none %}{% if stats.p50 <= stats.target_p50 %}<span class="ok">✓ under</span>{% else %}! over{% endif %} {{ stats.target_p50 }} ms target{% else %}no calls yet{% endif %}</div></div>
+  <div class="tile"><div class="label">95th percentile response time</div>
+    <div class="value">{{ '%d ms'|format(stats.p95) if stats.p95 is not none else '—' }}</div>
+    <div class="note">{% if stats.p95 is not none %}{% if stats.p95 <= stats.target_p95 %}<span class="ok">✓ under</span>{% else %}! over{% endif %} {{ stats.target_p95 }} ms target{% else %}no calls yet{% endif %}</div></div>
+  <div class="tile"><div class="label">Agent replies measured</div><div class="value">{{ stats.count }}</div>
+    <div class="note">last {{ stats.count }} turns</div></div>
+</section>
+
+<section class="card">
+  <div class="chart-head">
+    <h2>Where response time goes, last <span id="chart-count">{{ rows|length }}</span> replies</h2>
+    <span class="muted" style="font-size:13px">caller stops talking &rarr; first audio byte sent</span>
+  </div>
+  {% if rows %}
+  <ul class="legend" aria-hidden="true">
+    <li><span class="swatch" style="background:var(--series-1)"></span>Speech-to-text</li>
+    <li><span class="swatch" style="background:var(--series-2)"></span>Endpointing</li>
+    <li><span class="swatch" style="background:var(--series-3)"></span>LLM first token</li>
+    <li><span class="swatch" style="background:var(--series-4)"></span>TTS first byte</li>
+    <li><span class="swatch" style="background:var(--series-5)"></span>Other</li>
+  </ul>
+  <div class="chart-box">
+    <div id="latency-chart" role="img" aria-label="Stacked columns of voice-to-voice latency per agent reply, split by pipeline stage, with an 800 millisecond target line. The same numbers are in the table below."></div>
+    <div class="tooltip" id="tip"></div>
+  </div>
+  <details>
+    <summary>Show as table</summary>
+    <div class="table-scroll"><table>
+      <thead><tr><th>Reply</th><th>Time</th><th class="num">STT</th><th class="num">Endpoint</th><th class="num">LLM</th><th class="num">TTS</th><th class="num">Other</th><th class="num">Total</th><th>Interrupted</th></tr></thead>
+      <tbody>
+      {% for r in rows %}
+        <tr><td><a href="/dashboard/calls/{{ r.call_sid }}">{{ r.label }}</a></td><td>{{ r.at }}</td>
+          <td class="num">{{ r.stt_ms }}</td><td class="num">{{ r.endpoint_ms }}</td><td class="num">{{ r.llm_first_token_ms }}</td>
+          <td class="num">{{ r.tts_first_byte_ms }}</td><td class="num">{{ r.other_ms }}</td><td class="num"><strong>{{ r.v2v_ms }}</strong></td>
+          <td>{{ 'yes' if r.interrupted else '' }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+  </details>
+  <script type="application/json" id="chart-data">{{ chart_json|safe }}</script>
+  {% else %}
+  <p class="muted">No measured replies yet. Latency appears here after the first real call.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <div class="chart-head">
+    <h2>Pickups</h2>
+    <form method="post" action="/dashboard/rebalance">
+      <button type="submit" title="Re-plan today's unconfirmed pickups together (Hungarian algorithm)">Re-optimize today's matches</button>
+    </form>
+  </div>
+  {% if pickups %}
+  <div class="table-scroll"><table>
+    <thead><tr><th>Window</th><th>Restaurant</th><th>Food</th><th>Shelter</th><th>Volunteer</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for p in pickups %}
+      {% set st = status.get(p.status, (p.status, '•')) %}
+      <tr>
+        <td>{{ p.pickup_start.strftime('%H:%M') }}–{{ p.pickup_end.strftime('%H:%M') }}</td>
+        <td>{{ p.restaurant.name if p.restaurant else '' }}<br><span class="muted">{{ p.address }}</span></td>
+        <td>{{ p.quantity }} {{ p.items }}</td>
+        <td>{{ p.shelter.name if p.shelter else '—' }}</td>
+        <td>{{ p.volunteer.name if p.volunteer else '—' }}</td>
+        <td class="status status-{{ p.status }}"><span class="icon" aria-hidden="true">{{ st[1] }}</span>{{ st[0] }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <p class="muted">No pickups scheduled for this day.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Recent calls</h2>
+  {% if calls %}
+  <div class="table-scroll"><table>
+    <thead><tr><th>Started</th><th>From</th><th>Caller</th><th>Outcome</th><th>Language</th><th class="num">Cost</th></tr></thead>
+    <tbody>
+    {% for c in calls %}
+      <tr><td><a href="/dashboard/calls/{{ c.call_sid }}">{{ c.started_at.strftime('%b %d %H:%M') }}</a></td>
+        <td>{{ c.from_number }}</td><td>{{ c.caller_type or '—' }}</td><td>{{ c.outcome or 'in progress' }}</td>
+        <td>{{ c.language }}</td><td class="num">${{ '%.3f'|format(c.cost_usd) }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <p class="muted">No calls yet.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Text messages</h2>
+  {% if sms %}
+  <div class="table-scroll"><table>
+    <thead><tr><th>Time</th><th>Direction</th><th>Phone</th><th>Message</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for m in sms %}
+      <tr><td>{{ m.created_at.strftime('%b %d %H:%M') }}</td><td>{{ m.direction }}</td><td>{{ m.phone }}</td>
+        <td>{{ m.body }}</td><td><span class="pill">{{ m.status.replace('_', ' ') }}</span></td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <p class="muted">No texts yet.</p>
+  {% endif %}
+</section>
+
+<script>
+/* Stacked column chart drawn as plain SVG (no chart library).
+   Each column = one agent reply; segments = pipeline stages, bottom to top.
+   Marks: columns <= 24px wide, 2px surface gap between segments, 4px rounded top;
+   hairline grid; one labeled target line; hover tooltip per column. */
+(function () {
+  const holder = document.getElementById("latency-chart");
+  const dataEl = document.getElementById("chart-data");
+  if (!holder || !dataEl) return;
+  const { rows, segments, target } = JSON.parse(dataEl.textContent);
+  const colors = ["--series-1", "--series-2", "--series-3", "--series-4", "--series-5"].map(v => `var(${v})`);
+  const NS = "http://www.w3.org/2000/svg";
+  const countEl = document.getElementById("chart-count");
+
+  // Drawn at the container's real pixel width (not a scaled-down fixed canvas),
+  // so text stays a true 12px on phones; we show only as many recent replies as
+  // fit at ~14px per column, and redraw when the window is resized.
+  function draw() {
+  holder.innerHTML = "";
+  // Right margin holds the target label OUTSIDE the plot, so no column can sit under it.
+  const W = Math.max(300, Math.round(holder.clientWidth));
+  const H = W < 560 ? 220 : 280, M = { top: 14, right: 64, bottom: 26, left: 48 };
+  const plotW = W - M.left - M.right, plotH = H - M.top - M.bottom;
+  const shown = rows.slice(-Math.max(6, Math.floor(plotW / 14)));
+  countEl.textContent = shown.length;
+
+  // Clean y-axis ticks: a step of 250/500/1000 ms giving about 4-6 ticks.
+  const maxV = Math.max(target * 1.15, ...shown.map(r => r.v2v_ms));
+  const step = [250, 500, 1000, 2000].find(s => maxV / s <= 6) || 5000;
+  const yMax = Math.ceil(maxV / step) * step;
+  const y = v => M.top + plotH - (v / yMax) * plotH;
+
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", W);
+  svg.setAttribute("height", H);
+  const el = (name, attrs, parent = svg) => {
+    const n = document.createElementNS(NS, name);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    parent.appendChild(n);
+    return n;
+  };
+
+  for (let v = 0; v <= yMax; v += step) {  // gridlines + tick labels
+    el("line", { x1: M.left, x2: W - M.right, y1: y(v), y2: y(v), stroke: v === 0 ? "var(--axis)" : "var(--grid)", "stroke-width": 1 });
+    el("text", { x: M.left - 8, y: y(v) + 4, "text-anchor": "end" }).textContent = v >= 1000 ? `${v / 1000}s` : `${v}`;
+  }
+
+  const slot = plotW / shown.length;
+  const barW = Math.min(24, Math.max(4, slot * 0.6));
+  const GAP = 2, R = 4;
+  shown.forEach((r, i) => {
+    const cx = M.left + slot * i + slot / 2, x = cx - barW / 2;
+    const g = el("g", {});
+    let base = 0;
+    const parts = segments.map(([key], si) => ({ v: r[key], si })).filter(p => p.v > 0);
+    parts.forEach((p, pi) => {
+      const y0 = y(base), y1 = y(base + p.v);
+      base += p.v;
+      const top = pi === parts.length - 1;
+      const h = Math.max(0, y0 - y1 - (top ? 0 : GAP));  // gap sits above each non-top segment
+      if (h <= 0) return;
+      const yt = y0 - h - (top ? 0 : 0);
+      if (top) {  // rounded data-end on the top segment only; square at the baseline
+        const rr = Math.min(R, h, barW / 2);
+        el("path", { d: `M${x},${y0} V${yt + rr} Q${x},${yt} ${x + rr},${yt} H${x + barW - rr} Q${x + barW},${yt} ${x + barW},${yt + rr} V${y0} Z`, fill: colors[p.si] }, g);
+      } else {
+        el("rect", { x, y: yt, width: barW, height: h, fill: colors[p.si] }, g);
+      }
+    });
+    // Invisible hit target the full height of the slot: easier to hover than the bar.
+    const hit = el("rect", { x: M.left + slot * i, y: M.top, width: slot, height: plotH, fill: "transparent" }, g);
+    hit.addEventListener("mousemove", ev => showTip(ev, r));
+    hit.addEventListener("mouseleave", hideTip);
+  });
+
+  // Target line drawn last so it reads over the columns; labeled, not color-coded.
+  el("line", { x1: M.left, x2: W - M.right, y1: y(target), y2: y(target), stroke: "var(--text-secondary)", "stroke-width": 1 });
+  const tl = el("text", { x: W - M.right + 6, y: y(target) - 2, "text-anchor": "start", class: "target-label" });
+  tl.textContent = `${target} ms`;
+  el("text", { x: W - M.right + 6, y: y(target) + 12, "text-anchor": "start" }).textContent = "target";
+  holder.appendChild(svg);
+  }
+
+  const tip = document.getElementById("tip");
+  function showTip(ev, r) {
+    const lines = segments.slice().reverse().map(([key, label]) => {
+      const si = segments.findIndex(s => s[0] === key);
+      return `<div class="row"><span><span class="key" style="background:${colors[si]}"></span>${label}</span><b>${r[key]} ms</b></div>`;
+    }).join("");
+    tip.innerHTML = `<div class="row"><span>Reply ${r.label} · ${r.at}</span></div>`
+      + `<div class="row" style="margin:4px 0"><span>Total${r.interrupted ? " (interrupted)" : ""}</span><b>${r.v2v_ms} ms</b></div>` + lines;
+    const box = holder.parentElement.getBoundingClientRect();
+    let left = ev.clientX - box.left + 14;
+    if (left + 210 > box.width) left = ev.clientX - box.left - 214;
+    tip.style.left = `${Math.max(0, left)}px`;
+    tip.style.top = `${Math.max(0, ev.clientY - box.top - 20)}px`;
+    tip.style.display = "block";
+  }
+  function hideTip() { tip.style.display = "none"; }
+
+  draw();
+  let resizeTimer;
+  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(draw, 150); });
+})();
+</script>
+{% endblock %}
