@@ -66,8 +66,22 @@ class Harness:
         return [m["mark"]["name"] for m in self.out if m["event"] == "mark"]
 
     async def reply_done(self) -> None:
-        """Wait until the agent has finished sending its current reply."""
-        await until(lambda: self.session.response_task is not None and self.session.response_task.done())
+        """Wait until the agent has finished sending its reply to the CURRENT turn.
+
+        turn_index goes up a moment before the new reply task is created, so
+        "response_task is done" alone can match the previous (greeting) task and
+        return too early. On a slow CI machine that race really happened. When a
+        caller turn exists, require the running reply to belong to that turn.
+        """
+        def done() -> bool:
+            s = self.session
+            if s.response_task is None or not s.response_task.done():
+                return False
+            if s.turn_index == 0:
+                return True  # greeting: no caller turn yet
+            return s.current_timer is not None and s.current_timer.turn_index == s.turn_index
+
+        await until(done)
 
     def echo_marks(self, limit: int | None = None) -> None:
         """Twilio echoes a mark once the audio before it has played."""
