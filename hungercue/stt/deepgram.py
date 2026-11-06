@@ -7,6 +7,12 @@ sends back transcripts *while the caller is still talking*:
   is_final=False  -> interim guess, may still change ("I have three tr...")
   is_final=True   -> this stretch of words is locked in
   speech_final    -> Deepgram's own endpointing thinks the caller paused
+  from_finalize   -> the final result we forced by sending "Finalize"
+
+Latency: Deepgram's own endpointing proved slow to fire (0.4-3 s after the
+caller stopped, in the first eval run). Our Silero VAD knows within ~250 ms,
+so when it hears the end of speech we send {"type": "Finalize"}, which makes
+Deepgram return the final transcript for everything it has heard right away.
 
 Starting the LLM on the final text the instant the caller stops (instead of
 uploading a whole recording afterwards) is what makes sub-second replies possible.
@@ -34,6 +40,7 @@ class Transcript:
     speech_final: bool
     language: str = ""
     utterance_end: bool = False  # Deepgram's backup "they've stopped" signal
+    from_finalize: bool = False  # this final result answers our Finalize request
 
 
 class STTStream(Protocol):
@@ -41,6 +48,7 @@ class STTStream(Protocol):
 
     async def start(self) -> None: ...
     async def send(self, mulaw_audio: bytes) -> None: ...
+    async def finalize(self) -> None: ...
     def events(self) -> AsyncIterator[Transcript]: ...
     async def close(self) -> None: ...
 
@@ -78,6 +86,7 @@ def parse_message(raw: str | bytes) -> Transcript | None:
         is_final=bool(msg.get("is_final")),
         speech_final=bool(msg.get("speech_final")),
         language=languages[0] if languages else "",
+        from_finalize=bool(msg.get("from_finalize")),
     )
 
 
@@ -116,6 +125,11 @@ class DeepgramSTT:
     async def send(self, mulaw_audio: bytes) -> None:
         if self.ws is not None:
             await self.ws.send(mulaw_audio)  # binary frame = raw audio
+
+    async def finalize(self) -> None:
+        """Ask Deepgram to finalise what it has heard so far, immediately."""
+        if self.ws is not None:
+            await self.ws.send(json.dumps({"type": "Finalize"}))
 
     async def events(self) -> AsyncIterator[Transcript]:
         if self.ws is None:

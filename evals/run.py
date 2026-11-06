@@ -29,6 +29,7 @@ from evals import report
 from evals.caller import LLMCaller
 from evals.harness import EvalActions, run_scenario
 from evals.scenarios import SCENARIO_FILE, generate, load, save, smoke_subset
+from hungercue.llm.classify import make_classifier
 from hungercue.audio.vad import SileroVAD, VadSegmenter, load_session
 from hungercue.config import Settings
 from hungercue.db.repo import Repo
@@ -83,6 +84,7 @@ async def main(args: argparse.Namespace) -> int:
     agent_tts = AuraTTS(settings.deepgram_api_key, settings.tts_voice_en, settings.tts_voice_es, client=http)
     vad_session = load_session()
     call_settings = settings.model_copy(update={"recordings_dir": str(raw / "recordings")})
+    classifier = make_classifier(openai, settings.llm_model)
 
     def services_factory(actions: EvalActions) -> Services:
         return Services(
@@ -92,6 +94,7 @@ async def main(args: argparse.Namespace) -> int:
             vad_factory=lambda: VadSegmenter(SileroVAD(session=vad_session), min_speech_ms=settings.vad_min_speech_ms,
                                              min_silence_ms=settings.vad_min_silence_ms),
             actions=actions,
+            classifier=classifier,
         )
 
     scenarios = pick(args.suite)

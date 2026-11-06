@@ -239,10 +239,69 @@ async def test_interrupt_after_reply_written_but_still_playing(repo: Repo, tmp_p
 
 
 async def test_action_runs_immediately_when_nothing_to_play(repo: Repo, tmp_path: Path) -> None:
-    # The model hangs up without saying anything: no audio, so no mark will ever come.
-    h = Harness(repo, tmp_path, [tool_chunks("end_call", {"reason": "silence"}), []])
+    # TTS produces no audio (e.g. it failed), so no mark will ever come back:
+    # the hang-up must still happen instead of waiting forever.
+    h = Harness(repo, tmp_path, [tool_chunks("end_call", {"reason": "silence"})], tts=FakeTTS(chunks_per_text=0))
     await h.start()
-    await h.play_out()
+    await h.reply_done()
     await h.caller_says("...")
     await until(lambda: h.actions.log == [("hangup", "CA1")])
+    await h.hang_up()
+
+
+async def test_vad_end_sends_finalize_and_forced_final_starts_turn(repo: Repo, tmp_path: Path) -> None:
+    from hungercue.stt.deepgram import Transcript
+    h = Harness(repo, tmp_path, [text_chunks("Sure. ")])
+    await h.start()
+    await h.play_out()
+    h.stt.queue.put_nowait(Transcript("I have soup", is_final=False, speech_final=False))  # interim only
+    h.audio(LOUD, 15)
+    h.audio(QUIET, 15)
+    await until(lambda: h.stt.finalize_calls >= 1)  # VAD heard the end: we asked Deepgram to finalise
+    assert h.session.turn_index == 0  # not yet: the words weren't final
+    h.stt.queue.put_nowait(Transcript("I have soup", is_final=True, speech_final=False, from_finalize=True))
+    await until(lambda: h.session.turn_index == 1)  # the forced final starts the turn right away
+    await h.hang_up()
+
+
+async def test_background_classification_does_not_block_and_tool_wins(repo: Repo, tmp_path: Path) -> None:
+    import asyncio
+    from types import SimpleNamespace as NS
+    release = asyncio.Event()
+
+    async def slow_classifier(lines):
+        await release.wait()  # slower than the reply: proves the reply doesn't wait for it
+        return "volunteer", NS(prompt_tokens=50, completion_tokens=3, prompt_tokens_details=None)
+
+    h = Harness(repo, tmp_path, [text_chunks("Thanks for calling. ")])
+    h.services.classifier = slow_classifier
+    await h.start()
+    await h.play_out()
+    await h.caller_says("I'd like to help deliver food")
+    await until(lambda: h.session.turn_index == 1)
+    await h.reply_done()  # the reply finished while classification is still pending
+    assert h.session.state.caller_type == ""
+    release.set()
+    await until(lambda: h.session.state.caller_type == "volunteer")
+    assert h.session.agent.usage.input_tokens >= 50  # counted in the call's cost
+    h.session.state.caller_type_confirmed = True  # a saving tool settled it as something else
+    h.session.state.caller_type = "restaurant"
+    await h.hang_up()
+    assert (await repo.get_call("CA1")).caller_type == "restaurant"
+
+
+async def test_forced_final_at_a_pause_waits_for_vad_end(repo: Repo, tmp_path: Path) -> None:
+    """A mid-sentence pause must not end the caller's turn, even with final words in hand."""
+    from hungercue.stt.deepgram import Transcript
+    h = Harness(repo, tmp_path, [text_chunks("Okay. ")])
+    await h.start()
+    await h.play_out()
+    h.audio(LOUD, 15)
+    h.audio(QUIET, 6)  # 120 ms: a pause (96 ms) but not an end of turn (224 ms)
+    await until(lambda: h.stt.finalize_calls >= 1)
+    h.stt.queue.put_nowait(Transcript("I have", is_final=True, speech_final=False, from_finalize=True))
+    await asyncio.sleep(0.2)
+    assert h.session.turn_index == 0 and h.session.vad.in_speech  # still the caller's turn
+    h.audio(QUIET, 15)  # now they've really stopped
+    await until(lambda: h.session.turn_index == 1)
     await h.hang_up()

@@ -167,10 +167,9 @@ async def test_harness_runs_a_full_call_and_scores_it(repo: Repo, tmp_path: Path
     donation = {"business_name": "Casa Lupe", "contact_name": "Maria", "items": "rice and beans", "quantity": "3 trays",
                 "servings_estimate": 30, "food_tags": [], "pickup_date": f"{CALL_DATE:%Y-%m-%d}", "pickup_start": "15:00",
                 "pickup_end": "17:00", "address": "75 Lenox Ave", "notes": None, "confirmed_by_caller": True}
-    # Agent script: classify, ask a question (long reply, so the caller can interrupt it),
+    # Agent script: ask a question (long reply, so the caller can interrupt it),
     # answer the interruption, then book and say goodbye.
     agent = FakeOpenAI([
-        tool_chunks("set_caller_type", {"caller_type": "restaurant"}),
         text_chunks("Great, thank you so much for calling. What food do you have and where should we pick it up? "),
         text_chunks("Of course, take your time and tell me the food and the pickup details whenever you are ready. "),
         text_chunks("No problem at all. "),
@@ -202,3 +201,21 @@ async def test_harness_runs_a_full_call_and_scores_it(repo: Repo, tmp_path: Path
     assert result.barge_ins and result.barge_ins[0]["success"], result.barge_ins
     assert caller.heard[0].startswith("Hi, this is HungerCue")  # the caller heard the greeting first
     assert result.agent_cost_usd > 0
+
+
+async def test_caller_says_words_before_hanging_up() -> None:
+    from types import SimpleNamespace as NS
+    from evals.caller import LLMCaller
+
+    class Client:
+        def __init__(self):
+            self.chat = NS(completions=NS(create=self.create))
+
+        async def create(self, **kw):
+            return NS(usage=NS(prompt_tokens=10, completion_tokens=5),
+                      choices=[NS(message=NS(content="Sí, es correcto. <hangup>"))])
+
+    s = next(x for x in generate() if x.caller_type == "shelter")
+    caller = LLMCaller(Client(), "m", s, CALL_DATE)
+    assert await caller.reply("¿Es correcto?") == "Sí, es correcto."  # the agent hears the yes
+    assert await caller.reply("Gracias") == HANGUP  # then the call ends

@@ -25,6 +25,9 @@ def test_parse_messages() -> None:
     assert parse_message(results("I have", False)) == Transcript("I have", False, False, "")
     assert parse_message('{"type":"UtteranceEnd"}').utterance_end
     assert parse_message('{"type":"Metadata"}') is None
+    forced = json.loads(results("done", True, False))
+    forced["from_finalize"] = True
+    assert parse_message(json.dumps(forced)).from_finalize
     assert parse_message('{"type":"Results","channel":{"alternatives":[]}}') is None
 
 
@@ -60,5 +63,6 @@ async def test_stream_round_trip() -> None:
     await stt.send(b"\xff" * 160)
     got = [t async for t in stt.events()]
     assert [t.text for t in got] == ["hi", "hi there"] and got[-1].speech_final
+    await stt.finalize()
     await stt.close()
-    assert fake.sent == [b"\xff" * 160, '{"type": "CloseStream"}'] and fake.closed
+    assert fake.sent == [b"\xff" * 160, '{"type": "Finalize"}', '{"type": "CloseStream"}'] and fake.closed

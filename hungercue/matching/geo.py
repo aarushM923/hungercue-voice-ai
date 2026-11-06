@@ -15,6 +15,7 @@ estimate for ranking candidates, which is all matching needs. The interface
 from __future__ import annotations
 
 import asyncio
+import difflib
 import math
 import re
 
@@ -66,6 +67,18 @@ def travel_minutes(a: Point | None, b: Point | None, has_car: bool = True) -> fl
     if has_car:
         return km / CAR_KMH * 60
     return km / TRANSIT_KMH * 60 + TRANSIT_OVERHEAD_MIN
+
+
+def canonical_neighborhood(name: str) -> str:
+    """Snap a heard neighbourhood name to a known one: speech recognition writes
+    "Park Slope" as "Parksloe" sometimes, and a misspelt name can't be located,
+    so that volunteer would never be matched. Unknown names are kept as said."""
+    key = re.sub(r"[^a-z ]", "", name.lower().replace("-", " ")).strip()
+    if key in NEIGHBORHOODS:
+        return name.strip()
+    squashed = {k.replace(" ", ""): k for k in NEIGHBORHOODS}
+    match = difflib.get_close_matches(key.replace(" ", ""), list(squashed), n=1, cutoff=0.8)
+    return squashed[match[0]].title() if match else name.strip()
 
 
 def neighborhood_point(name: str) -> Point | None:

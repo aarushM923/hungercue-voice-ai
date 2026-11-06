@@ -35,7 +35,7 @@ def test_detects_one_utterance_in_real_speech() -> None:
     speech = load_pcm()
     silence = np.zeros(8000, dtype=np.int16)  # 1 s
     audio = np.concatenate([silence, speech, silence])
-    events = feed_in_twilio_frames(VadSegmenter(SileroVAD()), audio)
+    events = [e for e in feed_in_twilio_frames(VadSegmenter(SileroVAD()), audio) if e.kind != "speech_pause"]
     kinds = [e.kind for e in events]
     assert kinds == ["speech_start", "speech_end"], kinds
     start, end = events[0].stream_ms, events[1].stream_ms
@@ -49,12 +49,21 @@ def test_segmenter_hysteresis_with_fake_probabilities() -> None:
     seg = VadSegmenter(lambda _chunk: next(probs), min_speech_ms=96, min_silence_ms=224)
     events = seg.push_float(np.zeros(CHUNK * 15, dtype=np.float32))
     # 0.4 is below start but above end threshold: it must NOT end the utterance.
-    assert [e.kind for e in events] == ["speech_start", "speech_end"]
+    # The pause (96 ms of silence) is reported once, before the end (224 ms).
+    assert [e.kind for e in events] == ["speech_start", "speech_pause", "speech_end"]
     assert events[0].stream_ms == 0  # start is back-dated to the first voiced chunk
-    assert events[1].stream_ms == 5 * 32  # end = last voiced chunk, not detection time
+    assert events[1].stream_ms == events[2].stream_ms == 5 * 32  # last voiced chunk, not detection time
 
 
 def test_short_noise_is_ignored() -> None:
     probs = iter([0.9, 0.1, 0.9, 0.1, 0.1, 0.1])
     seg = VadSegmenter(lambda _c: next(probs), min_speech_ms=96)
     assert seg.push_float(np.zeros(CHUNK * 6, dtype=np.float32)) == []
+
+
+def test_pause_fires_once_per_silent_stretch_and_resets() -> None:
+    # speech, short pause (3 silent chunks), speech again, then a full end of turn
+    probs = iter([0.9] * 4 + [0.1] * 3 + [0.9] * 3 + [0.1] * 8)
+    seg = VadSegmenter(lambda _c: next(probs), min_speech_ms=96, min_silence_ms=224, pause_ms=96)
+    kinds = [e.kind for e in seg.push_float(np.zeros(CHUNK * 18, dtype=np.float32))]
+    assert kinds == ["speech_start", "speech_pause", "speech_pause", "speech_end"]

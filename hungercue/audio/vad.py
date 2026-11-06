@@ -65,7 +65,7 @@ class SileroVAD:
 
 @dataclass
 class VadEvent:
-    kind: str  # "speech_start" | "speech_end"
+    kind: str  # "speech_start" | "speech_pause" | "speech_end"
     stream_ms: int  # position in the audio stream where it happened
 
 
@@ -87,12 +87,16 @@ class VadSegmenter:
         end_threshold: float = 0.35,
         min_speech_ms: int = 96,
         min_silence_ms: int = 224,
+        pause_ms: int = 96,
     ) -> None:
         self.prob_fn = prob_fn
         self.start_threshold = start_threshold
         self.end_threshold = end_threshold
         self.min_speech_chunks = max(1, min_speech_ms // CHUNK_MS)
         self.min_silence_chunks = max(1, min_silence_ms // CHUNK_MS)
+        # A "pause" is a shorter silence than an end of turn. It fires first, so the
+        # call can ask Deepgram to finalise early while we wait to confirm the end.
+        self.pause_chunks = max(1, min(pause_ms // CHUNK_MS, self.min_silence_chunks))
         self.buffer = np.zeros(0, dtype=np.float32)
         self.in_speech = False
         self.voiced_run = 0
@@ -125,6 +129,8 @@ class VadSegmenter:
             else:
                 if p < self.end_threshold:
                     self.silent_run += 1
+                    if self.silent_run == self.pause_chunks:  # exactly once per silent stretch
+                        events.append(VadEvent("speech_pause", self.last_voiced_ms))
                     if self.silent_run >= self.min_silence_chunks:
                         self.in_speech, self.voiced_run = False, 0
                         # The caller actually stopped at the last voiced chunk, not now.

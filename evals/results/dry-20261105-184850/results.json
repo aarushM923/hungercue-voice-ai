@@ -1,0 +1,520 @@
+[
+ {
+  "scenario_id": "S001",
+  "caller_type": "restaurant",
+  "language": "en",
+  "conditions": {
+   "voice": "aura-2-helena-en",
+   "noise": "cafe",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "classified_as": "restaurant",
+  "fields": [
+   {
+    "field": "items",
+    "ok": true,
+    "expected": [
+     [
+      "pastr",
+      "pastel",
+      "pastri"
+     ],
+     [
+      "muffin"
+     ]
+    ],
+    "got": "pastries and muffins"
+   },
+   {
+    "field": "quantity",
+    "ok": true,
+    "expected": 2,
+    "got": "two large boxes"
+   },
+   {
+    "field": "pickup_date",
+    "ok": true,
+    "expected": "2026-11-06",
+    "got": "2026-11-06"
+   },
+   {
+    "field": "pickup_start",
+    "ok": true,
+    "expected": "18:00",
+    "got": "18:00"
+   },
+   {
+    "field": "pickup_end",
+    "ok": true,
+    "expected": "20:00",
+    "got": "20:00"
+   },
+   {
+    "field": "address",
+    "ok": false,
+    "expected": "2210 Broadway",
+    "got": "twenty two ten Broadway"
+   },
+   {
+    "field": "business_name",
+    "ok": true,
+    "expected": "Sunrise Bagels",
+    "got": "Sunrise Bagels"
+   }
+  ],
+  "completed": true,
+  "server_turns": [
+   {
+    "turn_index": 1,
+    "stt_ms": 324.5,
+    "endpoint_ms": 0.0,
+    "llm_first_token_ms": 508.5,
+    "tts_first_byte_ms": 178.2,
+    "v2v_ms": 1019.3,
+    "interrupted": false
+   },
+   {
+    "turn_index": 2,
+    "stt_ms": 315.6,
+    "endpoint_ms": 0.0,
+    "llm_first_token_ms": 375.6,
+    "tts_first_byte_ms": 163.0,
+    "v2v_ms": 863.6,
+    "interrupted": false
+   },
+   {
+    "turn_index": 3,
+    "stt_ms": 321.4,
+    "endpoint_ms": 0.0,
+    "llm_first_token_ms": 434.8,
+    "tts_first_byte_ms": 173.5,
+    "v2v_ms": 1066.9,
+    "interrupted": false
+   },
+   {
+    "turn_index": 4,
+    "stt_ms": 233.6,
+    "endpoint_ms": 80.4,
+    "llm_first_token_ms": 366.6,
+    "tts_first_byte_ms": 156.7,
+    "v2v_ms": 878.9,
+    "interrupted": false
+   },
+   {
+    "turn_index": 5,
+    "stt_ms": 321.7,
+    "endpoint_ms": 0.0,
+    "llm_first_token_ms": 391.2,
+    "tts_first_byte_ms": 168.7,
+    "v2v_ms": 968.3,
+    "interrupted": false
+   },
+   {
+    "turn_index": 6,
+    "stt_ms": 318.2,
+    "endpoint_ms": 0.0,
+    "llm_first_token_ms": 380.1,
+    "tts_first_byte_ms": 167.4,
+    "v2v_ms": 905.6,
+    "interrupted": false
+   },
+   {
+    "turn_index": 7,
+    "stt_ms": 321.1,
+    "endpoint_ms": 0.0,
+    "llm_first_token_ms": 437.7,
+    "tts_first_byte_ms": 165.9,
+    "v2v_ms": 937.0,
+    "interrupted": false
+   },
+   {
+    "turn_index": 8,
+    "stt_ms": 404.0,
+    "endpoint_ms": 0.1,
+    "llm_first_token_ms": null,
+    "tts_first_byte_ms": null,
+    "v2v_ms": null,
+    "interrupted": true
+   },
+   {
+    "turn_index": 9,
+    "stt_ms": 428.0,
+    "endpoint_ms": 11.6,
+    "llm_first_token_ms": 1706.0,
+    "tts_first_byte_ms": 168.3,
+    "v2v_ms": 2326.5,
+    "interrupted": false
+   }
+  ],
+  "client_v2v_ms": [
+   1116.1,
+   840.1,
+   1064.2,
+   795.9,
+   1065.9,
+   962.8,
+   1014.0,
+   2061.4
+  ],
+  "barge_ins": [],
+  "agent_cost_usd": 0.06005,
+  "eval_cost_usd": 0.01004,
+  "duration_s": 94.2,
+  "ended_by": "caller_hangup",
+  "error": "",
+  "transcript": [
+   {
+    "role": "agent",
+    "text": "Hi, this is HungerCue. Are you calling to donate food, for a shelter, or to volunteer?",
+    "at": "2026-11-05T18:48:50"
+   },
+   {
+    "role": "caller",
+    "text": "Hi. I'm calling to donate some surplus food from my restaurant.",
+    "at": "2026-11-05T18:49:03"
+   },
+   {
+    "role": "agent",
+    "text": "Great! What is the name of your restaurant?",
+    "at": "2026-11-05T18:49:05"
+   },
+   {
+    "role": "caller",
+    "text": "It's Sunrise Bagels.",
+    "at": "2026-11-05T18:49:10"
+   },
+   {
+    "role": "agent",
+    "text": "Thanks. What food items do you have to donate?",
+    "at": "2026-11-05T18:49:12"
+   },
+   {
+    "role": "caller",
+    "text": "We have pastries and muffins ready to donate.",
+    "at": "2026-11-05T18:49:19"
+   },
+   {
+    "role": "agent",
+    "text": "How many pastries and muffins do you have, roughly?",
+    "at": "2026-11-05T18:49:21"
+   },
+   {
+    "role": "caller",
+    "text": "About two large boxes.",
+    "at": "2026-11-05T18:49:27"
+   },
+   {
+    "role": "agent",
+    "text": "When can the food be picked up? Please give me the date and the start and end time for the pickup window.",
+    "at": "2026-11-05T18:49:29"
+   },
+   {
+    "role": "caller",
+    "text": "It can be picked up tomorrow between six and 8PM.",
+    "at": "2026-11-05T18:49:39"
+   },
+   {
+    "role": "agent",
+    "text": "What is the pickup address for Sunrise Bagels?",
+    "at": "2026-11-05T18:49:41"
+   },
+   {
+    "role": "caller",
+    "text": "The address is twenty two ten Broadway,",
+    "at": "2026-11-05T18:49:47"
+   },
+   {
+    "role": "agent",
+    "text": "Does the food contain any pork, nuts, or is it vegetarian or halal?",
+    "at": "2026-11-05T18:49:49"
+   },
+   {
+    "role": "caller",
+    "text": "I'm not sure about that. Sorry.",
+    "at": "2026-11-05T18:49:58"
+   },
+   {
+    "role": "agent",
+    "text": "No problem. To confirm, Sunrise Bagels is donating two large boxes of pastries and muffins for pickup tomorrow between six and eight PM at twenty two ten Broadway. Is that right?",
+    "at": "2026-11-05T18:50:03"
+   },
+   {
+    "role": "caller",
+    "text": "Yes.",
+    "at": "2026-11-05T18:50:14"
+   },
+   {
+    "role": "agent",
+    "text": " [interrupted]",
+    "at": "2026-11-05T18:50:15"
+   },
+   {
+    "role": "caller",
+    "text": "Correct.",
+    "at": "2026-11-05T18:50:15"
+   },
+   {
+    "role": "agent",
+    "text": "Thank you! You will get a text confirmation with the pickup time and the volunteer's name. Is there anything else I can help you with?",
+    "at": "2026-11-05T18:50:19"
+   }
+  ]
+ },
+ {
+  "scenario_id": "S003",
+  "caller_type": "volunteer",
+  "language": "en",
+  "conditions": {
+   "voice": "aura-2-zeus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "classified_as": "volunteer",
+  "fields": [
+   {
+    "field": "availability_days",
+    "ok": true,
+    "expected": [
+     "mon",
+     "tue"
+    ],
+    "got": [
+     "mon",
+     "tue"
+    ]
+   },
+   {
+    "field": "availability_start",
+    "ok": true,
+    "expected": "10:00",
+    "got": [
+     "10:00"
+    ]
+   },
+   {
+    "field": "availability_end",
+    "ok": true,
+    "expected": "16:00",
+    "got": [
+     "16:00"
+    ]
+   },
+   {
+    "field": "neighborhoods",
+    "ok": true,
+    "expected": [
+     "Park Slope"
+    ],
+    "got": [
+     "Park Slope"
+    ]
+   },
+   {
+    "field": "has_car",
+    "ok": true,
+    "expected": false,
+    "got": false
+   }
+  ],
+  "completed": true,
+  "server_turns": [
+   {
+    "turn_index": 1,
+    "stt_ms": 357.5,
+    "endpoint_ms": 0.0,
+    "llm_first_token_ms": 391.6,
+    "tts_first_byte_ms": 159.8,
+    "v2v_ms": 921.4,
+    "interrupted": false
+   },
+   {
+    "turn_index": 2,
+    "stt_ms": 317.8,
+    "endpoint_ms": 0.0,
+    "llm_first_token_ms": 480.8,
+    "tts_first_byte_ms": 154.2,
+    "v2v_ms": 974.6,
+    "interrupted": false
+   },
+   {
+    "turn_index": 3,
+    "stt_ms": 336.5,
+    "endpoint_ms": 0.0,
+    "llm_first_token_ms": 365.3,
+    "tts_first_byte_ms": 313.1,
+    "v2v_ms": 1058.3,
+    "interrupted": false
+   },
+   {
+    "turn_index": 4,
+    "stt_ms": 325.7,
+    "endpoint_ms": 0.0,
+    "llm_first_token_ms": 449.5,
+    "tts_first_byte_ms": 190.3,
+    "v2v_ms": 974.9,
+    "interrupted": false
+   },
+   {
+    "turn_index": 5,
+    "stt_ms": 344.2,
+    "endpoint_ms": 0.0,
+    "llm_first_token_ms": 1683.7,
+    "tts_first_byte_ms": 324.3,
+    "v2v_ms": 2365.2,
+    "interrupted": false
+   }
+  ],
+  "client_v2v_ms": [
+   778.0,
+   952.2,
+   1315.0,
+   1192.3,
+   2202.4
+  ],
+  "barge_ins": [],
+  "agent_cost_usd": 0.03995,
+  "eval_cost_usd": 0.01021,
+  "duration_s": 66.4,
+  "ended_by": "caller_hangup",
+  "error": "",
+  "transcript": [
+   {
+    "role": "agent",
+    "text": "Hi, this is HungerCue. Are you calling to donate food, for a shelter, or to volunteer?",
+    "at": "2026-11-05T18:48:50"
+   },
+   {
+    "role": "caller",
+    "text": "Hi. I'm calling to sign up as a volunteer driver or picker upper for food pickups.",
+    "at": "2026-11-05T18:49:05"
+   },
+   {
+    "role": "agent",
+    "text": "Great! Can I have your name, please?",
+    "at": "2026-11-05T18:49:06"
+   },
+   {
+    "role": "caller",
+    "text": "George",
+    "at": "2026-11-05T18:49:11"
+   },
+   {
+    "role": "agent",
+    "text": "Thanks, George. What days and times are you available to volunteer?",
+    "at": "2026-11-05T18:49:13"
+   },
+   {
+    "role": "caller",
+    "text": "Actually, it's James, not George. I'm available Monday and Tuesday from around ten in the morning and about four in the afternoon.",
+    "at": "2026-11-05T18:49:27"
+   },
+   {
+    "role": "agent",
+    "text": "Thanks, James. Do you have a car to help with pickups?",
+    "at": "2026-11-05T18:49:29"
+   },
+   {
+    "role": "caller",
+    "text": "No. I don't have a car. I usually take the subway.",
+    "at": "2026-11-05T18:49:37"
+   },
+   {
+    "role": "agent",
+    "text": "Got it. Which neighborhoods in New York City are you comfortable volunteering in?",
+    "at": "2026-11-05T18:49:39"
+   },
+   {
+    "role": "caller",
+    "text": "I can cover the Park Slope area.",
+    "at": "2026-11-05T18:49:46"
+   },
+   {
+    "role": "agent",
+    "text": "Thanks, James. We'll text you pickup offers in Park Slope for Monday and Tuesday from ten AM to four PM. Is there anything else I can help you with?",
+    "at": "2026-11-05T18:49:50"
+   }
+  ]
+ },
+ {
+  "scenario_id": "S004",
+  "caller_type": "shelter",
+  "language": "es",
+  "conditions": {
+   "voice": "aura-2-celeste-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": true
+  },
+  "classified_as": "",
+  "fields": [
+   {
+    "field": "capacity",
+    "ok": false,
+    "expected": 80,
+    "got": null
+   },
+   {
+    "field": "receiving_start",
+    "ok": false,
+    "expected": "12:00",
+    "got": null
+   },
+   {
+    "field": "receiving_end",
+    "ok": false,
+    "expected": "20:00",
+    "got": null
+   },
+   {
+    "field": "needs",
+    "ok": false,
+    "expected": [
+     "prepared meals"
+    ],
+    "got": []
+   },
+   {
+    "field": "dietary_restrictions",
+    "ok": false,
+    "expected": [],
+    "got": []
+   },
+   {
+    "field": "name",
+    "ok": false,
+    "expected": "Bridge Women's Center",
+    "got": null
+   },
+   {
+    "field": "address",
+    "ok": false,
+    "expected": "212 West 112th Street",
+    "got": null
+   }
+  ],
+  "completed": false,
+  "server_turns": [],
+  "client_v2v_ms": [],
+  "barge_ins": [],
+  "agent_cost_usd": 0.00566,
+  "eval_cost_usd": 0.00017,
+  "duration_s": 8.6,
+  "ended_by": "caller_hangup",
+  "error": "RemoteProtocolError: Server disconnected without sending a response.",
+  "transcript": [
+   {
+    "role": "agent",
+    "text": "Hi, this is HungerCue. Are you calling to donate food, for a shelter, or to volunteer?",
+    "at": "2026-11-05T18:48:50"
+   }
+  ]
+ }
+]

@@ -68,6 +68,8 @@ async def test_update_shelter_and_hook(repo: Repo) -> None:
     s = (await repo.active_shelters())[0]
     assert s.needs == ["produce"] and s.dietary_restrictions == ["halal"] and s.receiving_end == "18:00"
     assert seen == [("shelter", 60)] and ctx.state.outcome == "shelter_updated"
+    # A successful save settles the caller type, which the background guess can't override.
+    assert ctx.state.caller_type == "shelter" and ctx.state.caller_type_confirmed
     assert not (await call(ctx, "update_shelter", {**args, "receiving_start": "10am"}))["ok"]
 
 
@@ -83,12 +85,10 @@ async def test_update_volunteer_drops_bad_slots(repo: Repo) -> None:
 
 async def test_actions_and_errors(repo: Repo) -> None:
     ctx = ctx_for(repo)
-    await call(ctx, "set_caller_type", {"caller_type": "restaurant"})
-    assert ctx.state.caller_type == "restaurant"
     await call(ctx, "transfer_to_human", {"reason": "asked"})
     assert ctx.pending_action == "transferred" and ctx.state.outcome == "transferred"
     await call(ctx, "end_call", {"reason": "done"})
     assert ctx.pending_action == "end_call" and ctx.state.outcome == "transferred"
     assert "unknown tool" in (await call(ctx, "nope", {}))["error"]
-    assert "internal error" in (await call(ctx, "set_caller_type", {"wrong_arg": 1}))["error"]
-    assert ctx.calls == ["set_caller_type", "transfer_to_human", "end_call", "nope", "set_caller_type"]
+    assert "internal error" in (await call(ctx, "transfer_to_human", {"wrong_arg": 1}))["error"]
+    assert ctx.calls == ["transfer_to_human", "end_call", "nope", "transfer_to_human"]

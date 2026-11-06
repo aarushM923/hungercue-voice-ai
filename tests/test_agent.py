@@ -47,7 +47,7 @@ async def test_text_reply_streams_pieces(repo: Repo) -> None:
     assert agent.usage.input_tokens == 120 and agent.usage.cached_tokens == 100
     assert agent.first_token_at is not None
     req = fake.requests[0]
-    assert req["stream"] and req["model"] == "gpt-4.1-mini" and len(req["tools"]) == 7
+    assert req["stream"] and req["model"] == "gpt-4.1-mini" and len(req["tools"]) == 6
 
 
 async def test_tool_call_books_pickup_then_speaks(repo: Repo) -> None:
@@ -63,10 +63,13 @@ async def test_tool_call_books_pickup_then_speaks(repo: Repo) -> None:
     agent = Agent(fake, "gpt-4.1-mini", ctx)
     messages = [{"role": "user", "content": "yes that's right"}]
     pieces = [p async for p in agent.respond(messages)]
-    assert pieces == ["You're all set!"]
+    # The model called the tool before saying anything, so a filler plays at once
+    # instead of two LLM round trips of silence.
+    assert pieces == ["Got it, one moment.", "You're all set!"]
     roles = [m["role"] for m in messages]
     assert roles == ["user", "assistant", "tool", "assistant"]
     assert messages[1]["tool_calls"][0]["function"]["name"] == "log_donation"
+    assert messages[1]["content"] == "Got it, one moment."  # history matches what was heard
     assert '"ok": true' in messages[2]["content"]
     p = await repo.get_pickup(booked[0])
     assert p.items == "bagels" and p.food_tags == ["bread"] and p.pickup_start.hour == 15
@@ -117,8 +120,26 @@ async def test_cancel_during_tool_still_finishes_write(repo: Repo) -> None:
 
 
 async def test_runaway_tool_loop_falls_back_to_transfer(repo: Repo) -> None:
-    scripts = [tool_chunks("set_caller_type", {"caller_type": "shelter"}, f"c{i}") for i in range(5)]
+    scripts = [tool_chunks("no_such_tool", {}, f"c{i}") for i in range(5)]
     ctx = ctx_for(repo)
     agent = Agent(FakeOpenAI(scripts), "gpt-4.1-mini", ctx)
     pieces = [p async for p in agent.respond([{"role": "user", "content": "hi"}])]
     assert "coordinator" in pieces[-1] and ctx.pending_action == "transferred"
+
+
+async def test_no_filler_when_model_already_spoke(repo: Repo) -> None:
+    from tests.fakes import FakeStream
+    fake = FakeOpenAI([text_chunks("Booking that now. ") + tool_chunks("log_donation", DONATION), text_chunks("Done! ")])
+    agent = Agent(fake, "gpt-4.1-mini", ctx_for(repo))
+    pieces = [p async for p in agent.respond([{"role": "user", "content": "yes"}])]
+    assert pieces == ["Booking that now.", "Done!"]
+
+
+async def test_ending_action_speaks_closing_line_in_callers_language(repo: Repo) -> None:
+    ctx = ctx_for(repo)
+    ctx.state.language = "es"
+    fake = FakeOpenAI([tool_chunks("end_call", {"reason": "done"}), text_chunks("never used ")])
+    agent = Agent(fake, "gpt-4.1-mini", ctx)
+    pieces = [p async for p in agent.respond([{"role": "user", "content": "eso es todo"}])]
+    assert pieces == ["Gracias por llamar a HungerCue. ¡Adiós!"]
+    assert len(fake.requests) == 1 and ctx.pending_action == "end_call"  # no second LLM round

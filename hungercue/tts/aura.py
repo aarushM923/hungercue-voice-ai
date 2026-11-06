@@ -45,11 +45,22 @@ class AuraTTS:
             "container": "none",  # raw bytes, no WAV header that would click on the line
         }
         headers = {"Authorization": f"Token {self.api_key}", "Content-Type": "application/json"}
-        async with self.client.stream("POST", SPEAK_URL, params=params, headers=headers, json={"text": text}) as r:
-            r.raise_for_status()
-            async for chunk in r.aiter_bytes():
-                if chunk:
-                    yield chunk
+        for attempt in (1, 2):
+            sent_any = False
+            try:
+                async with self.client.stream("POST", SPEAK_URL, params=params, headers=headers, json={"text": text}) as r:
+                    r.raise_for_status()
+                    async for chunk in r.aiter_bytes():
+                        if chunk:
+                            sent_any = True
+                            yield chunk
+                return
+            except httpx.TransportError:
+                # A kept-alive connection the server had already closed fails like this
+                # ("Server disconnected"). Retry once on a fresh connection, but only if
+                # no audio went out yet; otherwise the caller would hear words twice.
+                if sent_any or attempt == 2:
+                    raise
 
     async def aclose(self) -> None:
         await self.client.aclose()

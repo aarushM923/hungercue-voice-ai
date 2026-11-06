@@ -17,6 +17,7 @@ from hungercue.audio.vad import SileroVAD, VadSegmenter, load_session
 from hungercue.config import Settings
 from hungercue.db.repo import Repo
 from hungercue.db.session import Database
+from hungercue.llm.classify import make_classifier
 from hungercue.matching.geo import Geocoder
 from hungercue.matching.service import Matcher
 from hungercue.notify.followup import FollowUp
@@ -139,6 +140,8 @@ async def build_container(settings: Settings) -> AppContainer:
     vad_session = load_session()  # load the ONNX model once for all calls
     actions = TwilioCallActions(settings.twilio_account_sid, settings.twilio_auth_token) if has_twilio else None
 
+    llm_client = AsyncOpenAI(api_key=settings.openai_api_key)
+
     async def on_donation(pickup_id: int) -> None:
         # Matching + texting runs in the background so the caller isn't kept waiting.
         followup.donation_logged_background(pickup_id)
@@ -147,7 +150,7 @@ async def build_container(settings: Settings) -> AppContainer:
         settings=settings,
         repo=repo,
         store=store,
-        llm_client=AsyncOpenAI(api_key=settings.openai_api_key),
+        llm_client=llm_client,
         tts=AuraTTS(settings.deepgram_api_key, settings.tts_voice_en, settings.tts_voice_es),
         stt_factory=lambda: DeepgramSTT(
             settings.deepgram_api_key, settings.stt_model, endpointing_ms=settings.stt_endpointing_ms
@@ -161,5 +164,6 @@ async def build_container(settings: Settings) -> AppContainer:
         geocode=container.geocoder,
         on_donation=on_donation,
         on_call_end=call_end_logger(repo, sheets) if sheets else None,
+        classifier=make_classifier(llm_client, settings.llm_model),
     )
     return container

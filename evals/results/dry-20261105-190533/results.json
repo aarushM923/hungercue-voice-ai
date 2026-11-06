@@ -1,0 +1,228 @@
+[
+ {
+  "scenario_id": "S001",
+  "caller_type": "restaurant",
+  "language": "en",
+  "conditions": {
+   "voice": "aura-2-helena-en",
+   "noise": "cafe",
+   "snr_db": 10.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "classified_as": "",
+  "fields": [
+   {
+    "field": "items",
+    "ok": false,
+    "expected": [
+     [
+      "pastr",
+      "pastel",
+      "pastri"
+     ],
+     [
+      "muffin"
+     ]
+    ],
+    "got": null
+   },
+   {
+    "field": "quantity",
+    "ok": false,
+    "expected": 2,
+    "got": null
+   },
+   {
+    "field": "pickup_date",
+    "ok": false,
+    "expected": "2026-11-06",
+    "got": null
+   },
+   {
+    "field": "pickup_start",
+    "ok": false,
+    "expected": "18:00",
+    "got": null
+   },
+   {
+    "field": "pickup_end",
+    "ok": false,
+    "expected": "20:00",
+    "got": null
+   },
+   {
+    "field": "address",
+    "ok": false,
+    "expected": "2210 Broadway",
+    "got": null
+   },
+   {
+    "field": "business_name",
+    "ok": false,
+    "expected": "Sunrise Bagels",
+    "got": ""
+   }
+  ],
+  "completed": false,
+  "server_turns": [],
+  "client_v2v_ms": [],
+  "barge_ins": [],
+  "agent_cost_usd": 0.00528,
+  "eval_cost_usd": 0.00012,
+  "duration_s": 7.5,
+  "ended_by": "caller_hangup",
+  "error": "ReadError: ",
+  "transcript": [
+   {
+    "role": "agent",
+    "text": "Hi, this is HungerCue. Are you calling to donate food, for a shelter, or to volunteer?",
+    "at": "2026-11-05T19:05:33"
+   }
+  ]
+ },
+ {
+  "scenario_id": "S003",
+  "caller_type": "volunteer",
+  "language": "en",
+  "conditions": {
+   "voice": "aura-2-zeus-en",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": false,
+   "topic_change": false
+  },
+  "classified_as": "",
+  "fields": [
+   {
+    "field": "availability_days",
+    "ok": false,
+    "expected": [
+     "mon",
+     "tue"
+    ],
+    "got": []
+   },
+   {
+    "field": "availability_start",
+    "ok": false,
+    "expected": "10:00",
+    "got": []
+   },
+   {
+    "field": "availability_end",
+    "ok": false,
+    "expected": "16:00",
+    "got": []
+   },
+   {
+    "field": "neighborhoods",
+    "ok": false,
+    "expected": [
+     "Park Slope"
+    ],
+    "got": []
+   },
+   {
+    "field": "has_car",
+    "ok": false,
+    "expected": false,
+    "got": null
+   }
+  ],
+  "completed": false,
+  "server_turns": [],
+  "client_v2v_ms": [],
+  "barge_ins": [],
+  "agent_cost_usd": 0.0442,
+  "eval_cost_usd": 0.00832,
+  "duration_s": 115.4,
+  "ended_by": "caller_hangup",
+  "error": "ReadTimeout: ",
+  "transcript": [
+   {
+    "role": "agent",
+    "text": "Hi, this is HungerCue. Are you calling to donate food, for a shelter, or to volunteer?",
+    "at": "2026-11-05T19:05:33"
+   }
+  ]
+ },
+ {
+  "scenario_id": "S004",
+  "caller_type": "shelter",
+  "language": "es",
+  "conditions": {
+   "voice": "aura-2-celeste-es",
+   "noise": "none",
+   "snr_db": 30.0,
+   "mumble": false,
+   "interrupt": true,
+   "topic_change": true
+  },
+  "classified_as": "",
+  "fields": [
+   {
+    "field": "capacity",
+    "ok": false,
+    "expected": 80,
+    "got": null
+   },
+   {
+    "field": "receiving_start",
+    "ok": false,
+    "expected": "12:00",
+    "got": null
+   },
+   {
+    "field": "receiving_end",
+    "ok": false,
+    "expected": "20:00",
+    "got": null
+   },
+   {
+    "field": "needs",
+    "ok": false,
+    "expected": [
+     "prepared meals"
+    ],
+    "got": []
+   },
+   {
+    "field": "dietary_restrictions",
+    "ok": false,
+    "expected": [],
+    "got": []
+   },
+   {
+    "field": "name",
+    "ok": false,
+    "expected": "Bridge Women's Center",
+    "got": null
+   },
+   {
+    "field": "address",
+    "ok": false,
+    "expected": "212 West 112th Street",
+    "got": null
+   }
+  ],
+  "completed": false,
+  "server_turns": [],
+  "client_v2v_ms": [],
+  "barge_ins": [],
+  "agent_cost_usd": 0.01242,
+  "eval_cost_usd": 0.00017,
+  "duration_s": 27.2,
+  "ended_by": "caller_hangup",
+  "error": "ReadTimeout: ",
+  "transcript": [
+   {
+    "role": "agent",
+    "text": "Hi, this is HungerCue. Are you calling to donate food, for a shelter, or to volunteer?",
+    "at": "2026-11-05T19:05:33"
+   }
+  ]
+ }
+]

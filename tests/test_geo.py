@@ -41,3 +41,11 @@ async def test_geocoder_uses_table_then_nominatim_and_caches() -> None:
 async def test_geocoder_no_result() -> None:
     respx.get(NOMINATIM_URL).mock(return_value=httpx.Response(200, json=[]))
     assert await Geocoder(min_interval_s=0)("nowhere street brooklyn") is None
+
+
+def test_canonical_neighborhood_fixes_misheard_names() -> None:
+    from hungercue.matching.geo import canonical_neighborhood
+    assert canonical_neighborhood("Parksloe") == "Park Slope"
+    assert canonical_neighborhood("Williamsburgh") == "Williamsburg"
+    assert canonical_neighborhood("Harlem") == "Harlem"  # already known: kept as said
+    assert canonical_neighborhood("Atlantis") == "Atlantis"  # unknown and not close: kept

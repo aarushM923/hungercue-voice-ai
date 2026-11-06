@@ -1,0 +1,100 @@
+{
+ "calls": 3,
+ "errors": 0,
+ "classification_accuracy": 1.0,
+ "slot_accuracy": 0.8947,
+ "slots_correct": 17,
+ "slots_total": 19,
+ "task_completion_rate": 1.0,
+ "latency_ms": {
+  "client_p50": 3273.5,
+  "client_p95": 5292.6,
+  "server_p50": 3145.9,
+  "server_p95": 5414.9,
+  "turns": 17,
+  "stage_medians": {
+   "stt_ms": 1601.7,
+   "endpoint_ms": 536.9,
+   "llm_first_token_ms": 643.75,
+   "tts_first_byte_ms": 163.3
+  }
+ },
+ "barge_in": {
+  "attempts": 1,
+  "success_rate": 1.0,
+  "median_reaction_ms": 540.7
+ },
+ "cost_usd": {
+  "agent_per_call": 0.0553,
+  "eval_overhead_per_call": 0.0124,
+  "total_run": 0.2
+ },
+ "per_field_accuracy": {
+  "restaurant.address": 1.0,
+  "restaurant.business_name": 1.0,
+  "restaurant.items": 1.0,
+  "restaurant.pickup_date": 1.0,
+  "restaurant.pickup_end": 1.0,
+  "restaurant.pickup_start": 1.0,
+  "restaurant.quantity": 1.0,
+  "shelter.address": 0.0,
+  "shelter.capacity": 1.0,
+  "shelter.dietary_restrictions": 1.0,
+  "shelter.name": 1.0,
+  "shelter.needs": 0.0,
+  "shelter.receiving_end": 1.0,
+  "shelter.receiving_start": 1.0,
+  "volunteer.availability_days": 1.0,
+  "volunteer.availability_end": 1.0,
+  "volunteer.availability_start": 1.0,
+  "volunteer.has_car": 1.0,
+  "volunteer.neighborhoods": 1.0
+ },
+ "by_condition": {
+  "clean_audio": {
+   "calls": 2,
+   "slot_accuracy": 0.8333,
+   "completion": 1.0
+  },
+  "background_noise": {
+   "calls": 1,
+   "slot_accuracy": 1.0,
+   "completion": 1.0
+  },
+  "mumbling": {
+   "calls": 0,
+   "slot_accuracy": null,
+   "completion": null
+  },
+  "interruptions": {
+   "calls": 1,
+   "slot_accuracy": 0.7143,
+   "completion": 1.0
+  },
+  "topic_change": {
+   "calls": 1,
+   "slot_accuracy": 0.7143,
+   "completion": 1.0
+  },
+  "spanish": {
+   "calls": 1,
+   "slot_accuracy": 0.7143,
+   "completion": 1.0
+  },
+  "restaurant": {
+   "calls": 1,
+   "slot_accuracy": 1.0,
+   "completion": 1.0
+  },
+  "shelter": {
+   "calls": 1,
+   "slot_accuracy": 0.7143,
+   "completion": 1.0
+  },
+  "volunteer": {
+   "calls": 1,
+   "slot_accuracy": 1.0,
+   "completion": 1.0
+  }
+ }
+}

@@ -20,6 +20,7 @@ from datetime import datetime
 from typing import Any
 
 from hungercue.db.repo import Repo
+from hungercue.matching.geo import canonical_neighborhood
 from hungercue.phone import normalize_phone
 from hungercue.state.session_store import CallState
 from hungercue.timeutil import parse_hhmm
@@ -54,8 +55,6 @@ HHMM = {"type": "string", "description": "24-hour local time HH:MM"}
 DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 
 TOOL_SCHEMAS: list[dict[str, Any]] = [
-    _fn("set_caller_type", "Record what kind of caller this is as soon as it's clear.",
-        {"caller_type": {"type": "string", "enum": ["restaurant", "shelter", "volunteer"]}}),
     _fn("log_donation", "Book a food pickup from a restaurant. Only call after reading details back and the caller confirmed.", {
         "business_name": S,
         "contact_name": S_NULL,
@@ -141,10 +140,12 @@ def _valid_hhmm(value: str | None) -> bool:
         return False
 
 
-async def set_caller_type(ctx: ToolContext, caller_type: str) -> dict[str, Any]:
+async def _record_outcome(ctx: ToolContext, caller_type: str, outcome: str) -> None:
+    """A successful save settles who the caller is (overriding the background guess)."""
     ctx.state.caller_type = caller_type
-    await ctx.repo.update_call(ctx.state.call_sid, caller_type=caller_type)
-    return {"ok": True}
+    ctx.state.caller_type_confirmed = True
+    ctx.state.outcome = outcome
+    await ctx.repo.update_call(ctx.state.call_sid, caller_type=caller_type, outcome=outcome)
 
 
 async def log_donation(ctx: ToolContext, **a: Any) -> dict[str, Any]:
@@ -188,8 +189,7 @@ async def log_donation(ctx: ToolContext, **a: Any) -> dict[str, Any]:
         call_sid=ctx.state.call_sid,
     )
     ctx.state.pickup_id = pickup.id
-    ctx.state.outcome = "pickup_booked"
-    await ctx.repo.update_call(ctx.state.call_sid, outcome="pickup_booked")
+    await _record_outcome(ctx, "restaurant", "pickup_booked")
     if ctx.on_donation:
         await ctx.on_donation(pickup.id)
     return {"ok": True, "pickup_id": pickup.id, "next": "Tell the caller they'll get a text with the volunteer's name."}
@@ -205,8 +205,7 @@ async def update_shelter(ctx: ToolContext, **a: Any) -> dict[str, Any]:
               "dietary_restrictions": [d.lower() for d in a.get("dietary_restrictions") or []] or None,
               "lat": lat, "lon": lon, "language": ctx.state.language}
     shelter = await ctx.repo.upsert_shelter(normalize_phone(ctx.state.from_number) or f"unknown:{ctx.state.call_sid}", **fields)
-    ctx.state.outcome = "shelter_updated"
-    await ctx.repo.update_call(ctx.state.call_sid, outcome="shelter_updated")
+    await _record_outcome(ctx, "shelter", "shelter_updated")
     if ctx.on_directory_update:
         await ctx.on_directory_update("shelter", {**a, "id": shelter.id})
     return {"ok": True}
@@ -215,7 +214,7 @@ async def update_shelter(ctx: ToolContext, **a: Any) -> dict[str, Any]:
 async def update_volunteer(ctx: ToolContext, **a: Any) -> dict[str, Any]:
     a = _clean(a)
     slots = [s for s in a.get("availability") or [] if _valid_hhmm(s.get("start")) and _valid_hhmm(s.get("end"))]
-    hoods = a.get("neighborhoods") or []
+    hoods = [canonical_neighborhood(h) for h in a.get("neighborhoods") or []]
     lat, lon = await _geo(ctx, f"{hoods[0]}, New York, NY" if hoods else None)
     vol = await ctx.repo.upsert_volunteer(
         normalize_phone(ctx.state.from_number) or f"unknown:{ctx.state.call_sid}",
@@ -227,8 +226,7 @@ async def update_volunteer(ctx: ToolContext, **a: Any) -> dict[str, Any]:
         lon=lon,
         language=ctx.state.language,
     )
-    ctx.state.outcome = "volunteer_updated"
-    await ctx.repo.update_call(ctx.state.call_sid, outcome="volunteer_updated")
+    await _record_outcome(ctx, "volunteer", "volunteer_updated")
     if ctx.on_directory_update:
         await ctx.on_directory_update("volunteer", {**a, "id": vol.id})
     return {"ok": True}
@@ -244,7 +242,6 @@ async def _set_action(ctx: ToolContext, action: str, reason: str) -> dict[str, A
 
 
 HANDLERS: dict[str, Callable[..., Awaitable[dict[str, Any]]]] = {
-    "set_caller_type": set_caller_type,
     "log_donation": log_donation,
     "update_shelter": update_shelter,
     "update_volunteer": update_volunteer,

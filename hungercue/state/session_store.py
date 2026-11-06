@@ -25,6 +25,7 @@ class CallState:
     from_number: str = ""
     language: str = "en"  # detected on the first caller turn
     caller_type: str = ""  # restaurant | shelter | volunteer once known
+    caller_type_confirmed: bool = False  # set by a saving tool; the background guess can't override it
     messages: list[dict[str, Any]] = field(default_factory=list)  # OpenAI chat history
     pickup_id: int | None = None
     outcome: str = ""

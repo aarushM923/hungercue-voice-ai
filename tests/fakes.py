@@ -79,12 +79,16 @@ class FakeSTT:
         self.queue: asyncio.Queue[Transcript | None] = asyncio.Queue()
         self.frames = 0
         self.closed = False
+        self.finalize_calls = 0
 
     async def start(self) -> None:
         pass
 
     async def send(self, audio: bytes) -> None:
         self.frames += 1
+
+    async def finalize(self) -> None:
+        self.finalize_calls += 1
 
     async def events(self):
         while (t := await self.queue.get()) is not None:

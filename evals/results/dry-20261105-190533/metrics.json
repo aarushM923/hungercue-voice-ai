@@ -1,0 +1,100 @@
+{
+ "calls": 3,
+ "errors": 3,
+ "classification_accuracy": 0.0,
+ "slot_accuracy": 0.0,
+ "slots_correct": 0,
+ "slots_total": 19,
+ "task_completion_rate": 0.0,
+ "latency_ms": {
+  "client_p50": null,
+  "client_p95": null,
+  "server_p50": null,
+  "server_p95": null,
+  "turns": 0,
+  "stage_medians": {
+   "stt_ms": null,
+   "endpoint_ms": null,
+   "llm_first_token_ms": null,
+   "tts_first_byte_ms": null
+  }
+ },
+ "barge_in": {
+  "attempts": 0,
+  "success_rate": null,
+  "median_reaction_ms": null
+ },
+ "cost_usd": {
+  "agent_per_call": 0.0206,
+  "eval_overhead_per_call": 0.0029,
+  "total_run": 0.07
+ },
+ "per_field_accuracy": {
+  "restaurant.address": 0.0,
+  "restaurant.business_name": 0.0,
+  "restaurant.items": 0.0,
+  "restaurant.pickup_date": 0.0,
+  "restaurant.pickup_end": 0.0,
+  "restaurant.pickup_start": 0.0,
+  "restaurant.quantity": 0.0,
+  "shelter.address": 0.0,
+  "shelter.capacity": 0.0,
+  "shelter.dietary_restrictions": 0.0,
+  "shelter.name": 0.0,
+  "shelter.needs": 0.0,
+  "shelter.receiving_end": 0.0,
+  "shelter.receiving_start": 0.0,
+  "volunteer.availability_days": 0.0,
+  "volunteer.availability_end": 0.0,
+  "volunteer.availability_start": 0.0,
+  "volunteer.has_car": 0.0,
+  "volunteer.neighborhoods": 0.0
+ },
+ "by_condition": {
+  "clean_audio": {
+   "calls": 2,
+   "slot_accuracy": 0.0,
+   "completion": 0.0
+  },
+  "background_noise": {
+   "calls": 1,
+   "slot_accuracy": 0.0,
+   "completion": 0.0
+  },
+  "mumbling": {
+   "calls": 0,
+   "slot_accuracy": null,
+   "completion": null
+  },
+  "interruptions": {
+   "calls": 1,
+   "slot_accuracy": 0.0,
+   "completion": 0.0
+  },
+  "topic_change": {
+   "calls": 1,
+   "slot_accuracy": 0.0,
+   "completion": 0.0
+  },
+  "spanish": {
+   "calls": 1,
+   "slot_accuracy": 0.0,
+   "completion": 0.0
+  },
+  "restaurant": {
+   "calls": 1,
+   "slot_accuracy": 0.0,
+   "completion": 0.0
+  },
+  "shelter": {
+   "calls": 1,
+   "slot_accuracy": 0.0,
+   "completion": 0.0
+  },
+  "volunteer": {
+   "calls": 1,
+   "slot_accuracy": 0.0,
+   "completion": 0.0
+  }
+ }
+}

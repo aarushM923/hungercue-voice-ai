@@ -25,6 +25,19 @@ from hungercue.llm.tools import TOOL_SCHEMAS, ToolContext, run_tool
 
 MAX_TOOL_ROUNDS = 4  # safety net against a model that keeps calling tools forever
 
+# When the model calls a tool BEFORE saying anything, the caller would otherwise sit
+# in silence for two LLM round trips (call the tool, then write the reply). The
+# first eval showed those turns were the entire slow tail (1.0-1.9 s). Like a human
+# dispatcher, we say a short line immediately while the work happens.
+SAVING_TOOLS = {"log_donation", "update_shelter", "update_volunteer"}
+FILLER = {"en": "Got it, one moment.", "es": "Entendido, un momento."}
+# Ending actions need no second round at all: a fixed closing line says it all.
+CLOSING = {
+    "end_call": {"en": "Thanks for calling HungerCue. Goodbye!", "es": "Gracias por llamar a HungerCue. ¡Adiós!"},
+    "transfer_to_human": {"en": "Connecting you with a coordinator now.", "es": "Le comunico con un coordinador ahora."},
+    "take_voicemail": {"en": "Sure.", "es": "Claro."},
+}
+
 # USD per 1M tokens for gpt-4.1-mini (input, cached input, output). Used for cost-per-call.
 PRICES = {"gpt-4.1-mini": (0.40, 0.10, 1.60)}
 
@@ -100,6 +113,7 @@ class Agent:
         """Yield speakable text pieces for the next agent turn. Mutates `messages`."""
         self.first_token_at = None
         loop = asyncio.get_running_loop()
+        said_anything = False  # across rounds of this one reply
         for _round in range(MAX_TOOL_ROUNDS + 1):
             chunker = SentenceChunker()
             spoken: list[str] = []
@@ -154,9 +168,28 @@ class Agent:
                         ]
                     messages.append(msg)
 
+            said_anything = said_anything or bool(spoken)
             if not tool_calls:
                 return
+            names = [t["name"] for t in tool_calls.values()]
+            lang = self.ctx.state.language if self.ctx.state.language in FILLER else "en"
+            ending = next((n for n in names if n in CLOSING), None)
+            extra = ""
+            if not said_anything and ending:
+                extra = CLOSING[ending][lang]
+            elif not said_anything and SAVING_TOOLS & set(names):
+                extra = FILLER[lang]
+            if extra:
+                if self.first_token_at is None:
+                    self.first_token_at = loop.time()  # the moment we had something to say
+                # Record it on the assistant message that holds the tool call, so the
+                # history matches what the caller heard.
+                messages[-1]["content"] = extra
+                said_anything = True
+                yield extra
             await self._run_tools(messages, list(tool_calls.values()))
+            if ending:
+                return  # goodbye / transfer / voicemail: nothing more for the model to say
         # Too many tool rounds: hand back something safe to say.
         yield "Sorry, let me connect you with a coordinator."
         self.ctx.pending_action = "transferred"

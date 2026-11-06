@@ -79,8 +79,11 @@ class LLMCaller:
         self.messages: list[dict[str, str]] = [{"role": "system", "content": persona_prompt(scenario, today)}]
         self.in_tokens = 0
         self.out_tokens = 0
+        self.hang_up_next = False
 
     async def reply(self, agent_text: str) -> str:
+        if self.hang_up_next:
+            return HANGUP
         self.messages.append({"role": "user", "content": agent_text or "(silence)"})
         r = await self.client.chat.completions.create(model=self.model, messages=self.messages, temperature=0.7)
         if r.usage:
@@ -88,7 +91,16 @@ class LLMCaller:
             self.out_tokens += r.usage.completion_tokens
         text = (r.choices[0].message.content or "").strip()
         self.messages.append({"role": "assistant", "content": text})
-        return HANGUP if HANGUP in text else text
+        if HANGUP in text:
+            # "Yes, that's right <hangup>": the agent must still HEAR the yes, so say
+            # the words now and hang up on the next turn. (Dropping them hid a
+            # confirmation from the agent in the first eval runs.)
+            words = text.replace(HANGUP, "").strip()
+            if words:
+                self.hang_up_next = True
+                return words
+            return HANGUP
+        return text
 
     def note_said(self, text: str) -> None:
         """Record a line the caller said outside reply() (the scripted interruption)."""

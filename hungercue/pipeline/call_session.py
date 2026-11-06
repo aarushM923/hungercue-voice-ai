@@ -81,6 +81,8 @@ class Services:
     on_donation: Callable[[int], Awaitable[None]] | None = None
     on_directory_update: Callable[[str, dict[str, Any]], Awaitable[None]] | None = None
     on_call_end: Callable[[CallSummary], Awaitable[None]] | None = None
+    # Background caller-type guess (see llm/classify.py); None = rely on the saving tools only.
+    classifier: Callable[[list[str]], Awaitable[tuple[str, Any]]] | None = None
 
 
 @dataclass
@@ -131,6 +133,7 @@ class CallSession:
         self.current_timer: TurnTimer | None = None
         self.last_turn: dict[str, Any] | None = None  # latency record of the latest reply
         self.last_turn_id: int | None = None
+        self.side_tasks: set[asyncio.Task[None]] = set()  # background work like classification
         self.finished = False
 
         # Turn-taking state
@@ -138,6 +141,7 @@ class CallSession:
         self.has_interim = False  # Deepgram is still refining words not yet final
         self.utterance_language = ""
         self.speech_end_at: float | None = None
+        self.finalized_this_pause = False
         self.last_final_at: float | None = None
 
     # ------------------------------------------------------------------ main loop
@@ -218,11 +222,32 @@ class CallSession:
             # the event happened (processed - event position) ms before now.
             happened_at = self.now() - (processed_ms - vad_event.stream_ms) / 1000
             if vad_event.kind == "speech_start":
+                self.speech_end_at = None  # a new utterance: any earlier end time is stale
                 if self.agent_busy():
                     await self.barge_in(caller_started=happened_at)
+            elif vad_event.kind == "speech_pause":
+                # Don't wait for Deepgram's own (slower) endpointing. At the first short
+                # pause, ask it to finalise what it has heard. That round trip then
+                # overlaps with the rest of our end-of-turn silence wait, so the final
+                # transcript is usually already here when we decide the caller is done.
+                # If they keep talking, nothing is lost: Deepgram keeps transcribing.
+                await self._finalize_stt()
+                self.finalized_this_pause = True
             else:
                 self.speech_end_at = happened_at
+                if not self.finalized_this_pause:  # e.g. pause and end thresholds configured equal
+                    await self._finalize_stt()
+                self.finalized_this_pause = False
                 await self.maybe_trigger(source="vad")
+
+    async def _finalize_stt(self) -> None:
+        # Always sent, even if nothing is pending: for a short "yes" Deepgram may not
+        # have sent an interim result yet, and Finalize costs nothing when there's nothing to flush.
+        if self.stt is not None:
+            try:
+                await self.stt.finalize()
+            except Exception:
+                log.warning("STT finalize failed", exc_info=True)
 
     def agent_busy(self) -> bool:
         """Is the agent thinking or talking (including audio still queued at Twilio)?"""
@@ -287,7 +312,12 @@ class CallSession:
                         self.utterance_language = t.language
                 elif t.text:
                     self.has_interim = True
-                if t.speech_final or t.utterance_end:
+                if t.utterance_end:
+                    # Deepgram's word-gap backup: works even when constant background noise
+                    # keeps our VAD from ever hearing silence.
+                    await self.maybe_trigger(source="utterance_end")
+                elif (t.speech_final or (t.from_finalize and t.is_final)) and not self.vad.in_speech:
+                    # The words are final AND our VAD already heard the end of speech.
                     await self.maybe_trigger(source="stt")
         except asyncio.CancelledError:
             raise
@@ -297,10 +327,16 @@ class CallSession:
     async def maybe_trigger(self, source: str) -> None:
         """Start the agent's turn if the caller has said something and has stopped.
 
-        Two independent end-of-turn signals, whichever comes first:
-          - Deepgram speech_final / UtteranceEnd (source="stt")
-          - our VAD heard silence (source="vad"), but only if every word is
-            already final, otherwise we'd reply to half a sentence.
+        Our VAD is the authority on "the caller has stopped" (224 ms of silence);
+        Deepgram supplies the words. The turn starts when BOTH hold:
+          - VAD heard the end of speech (source="vad"), and every word is final;
+          - or a final transcript arrives after the VAD already heard the end (source="stt").
+        Backup: Deepgram's UtteranceEnd (source="utterance_end") for noisy rooms
+        where the VAD may never hear real silence.
+
+        An earlier version also started the turn on the early "forced final" we
+        request at a 96 ms pause. That cut people off mid-sentence, and the
+        eval exposed it through an impossible latency number.
         """
         text = " ".join(self.pending_parts).strip()
         if not text:
@@ -327,6 +363,26 @@ class CallSession:
         self.state.messages.append({"role": "user", "content": text})
         await self.s.repo.add_transcript(self.state.call_sid, "caller", text)
         self._start_response(self.agent.respond(self.state.messages), timer=timer, log_text=True)
+        if self.s.classifier is not None and not self.state.caller_type_confirmed:
+            # Runs alongside the reply, not before it: the caller never waits on it.
+            task = asyncio.create_task(self._classify())
+            self.side_tasks.add(task)
+            task.add_done_callback(self.side_tasks.discard)
+
+    async def _classify(self) -> None:
+        assert self.s.classifier is not None
+        lines = [m["content"] for m in self.state.messages if m["role"] == "user"]
+        try:
+            guess, usage = await self.s.classifier(lines)
+        except Exception:
+            log.warning("caller classification failed", exc_info=True)
+            return
+        if usage is not None and self.agent is not None:
+            self.agent._add_usage(usage)  # counted in this call's cost
+        # A saving tool may have settled the type while we were waiting; it wins.
+        if guess and not self.state.caller_type_confirmed and guess != self.state.caller_type:
+            self.state.caller_type = guess
+            await self.s.repo.update_call(self.state.call_sid, caller_type=guess)
 
     def _update_language(self, text: str) -> None:
         """Switch to Spanish (or back) when a full utterance is detected in it.
@@ -403,11 +459,18 @@ class CallSession:
                 self.mark_counter += 1
                 name = f"m{self.mark_counter}"
                 self.sentence_marks.append((name, piece))
+                sent_audio = False
                 while (chunk := await q.get()) is not None:
                     if timer is not None and timer.t_first_audio is None:
                         timer.t_first_audio = self.now()
                     await self.send(ts.media_message(self.stream_sid, chunk))
                     self.recorder.add_outbound(chunk)
+                    sent_audio = True
+                if not sent_audio:
+                    # TTS produced nothing (it failed): nothing was heard and there is
+                    # nothing to bookmark, so don't wait on a mark for it.
+                    self.sentence_marks.remove((name, piece))
+                    continue
                 # Bookmark the end of this sentence; Twilio echoes it once played.
                 await self.send(ts.mark_message(self.stream_sid, name))
 
@@ -502,6 +565,12 @@ class CallSession:
             await self.stt.close()
         if not self.state.call_sid:
             return
+        if self.side_tasks:
+            # Let an in-flight classification land (briefly), so the call record has the final type.
+            _done, still_running = await asyncio.wait(list(self.side_tasks), timeout=5)
+            for task in still_running:
+                task.cancel()
+            await asyncio.gather(*still_running, return_exceptions=True)
 
         sid = self.state.call_sid
         audio_path = ""
